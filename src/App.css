@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #0ea5e9;
+  --error-color: #d83a52;
+  --first-background: #20233c;
+  --second-background: #383b50;
+  --opacity-black: rgba(0, 0, 0, 0.6);
+  --gray-color: #c5c7d0;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.normal-button {
+  background-color: var(--primary-color);
+  padding: 13px 140px;
+  border-radius: 16px;
+  border: solid 3px var(--primary-color);
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.normal-button:hover {
+  background-color: transparent;
+  border-color: var(--primary-color);
+  border-width: 3px;
+  transition: 0.5s;
+}
+.normal-small-button {
+  background-color: var(--primary-color);
+  padding: 13px 40px;
+  border-radius: 16px;
+  border: solid 3px var(--primary-color);
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.normal-small-button:hover {
+  background-color: transparent;
+  border-color: var(--primary-color);
+  border-width: 3px;
+  transition: 0.5s;
+}
+
+.error-small-button {
+  background-color: var(--error-color);
+  padding: 13px 50px;
+  border-radius: 16px;
+  border: solid 3px var(--error-color);
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.error-small-button:hover {
+  background-color: transparent;
+  border-color: var(--error-color);
+  border-width: 3px;
+  transition: 0.5s;
+}
+
+.errorMessage {
+  color: var(--error-color);
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.active {
+  background-color: rgba(14, 165, 233, 0.8);
+}
+
+.inactive {
+  background-color: transparent;
+}
+
+.hoverBg {
+  background-color: transparent;
+}
+
+.hoverBg:hover {
+  background-color: rgba(14, 165, 233, 0.8);
+}
+
+.addCentreModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  height: 70%;
+  background-color: var(--first-background);
+  margin: auto auto;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--opacity-black);
+}
+
+.addCentreModal:focus {
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 110%;
+}
+
+/* react-select styling */
+.react-select__control {
+  background-color: var(--second-background) !important;
+  border: 2px solid var(--primary-color) !important;
+  border-radius: 0.375rem !important;
+  min-height: 2.75rem !important;
+}
+.react-select__value-container {
+  padding-left: 1rem !important;
+}
+
+.react-select__placeholder {
+  color: #9ca3af !important;
+}
+
+.react-select__menu {
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.react-select__option:hover {
+  background-color: var(--primary-color) !important;
+}
+
+.react-select__multi-value {
+  background-color: rgba(14, 165, 233, 0.8) !important;
+}
+
+.react-select__multi-value__label {
+  color: var(--gray-color) !important;
+}
+
+.react-select__indicator-separator {
+  background-color: var(--primary-color) !important;
+}
+
+.react-select__indicator {
+  color: var(--primary-color) !important;
+}
+
+.react-select__single-value {
+  color: white !important;
+}
