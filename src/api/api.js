@@ -1,15 +1,15 @@
 const BASE_URL = 'http://localhost:7000'
 
 export const userValidation = (user, password) => {
-  return fetch(`${BASE_URL}/validation`, {
+  return fetch(`${BASE_URL}/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      user: user,
-      password: password
+      "username": user,
+      "password": password
     })
   }).then((response) => response.json())
 }
