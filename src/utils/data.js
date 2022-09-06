@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const createCentreValidation = () => Yup.object().shape({
+export const centreValidation = () => Yup.object().shape({
   centreName: Yup.string()
     .required('Porfavor ingrese el nombre del centro'),
   centreDirection: Yup.string()

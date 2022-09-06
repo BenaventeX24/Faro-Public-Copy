@@ -4,8 +4,9 @@ import { useFormik } from 'formik'
 import { freeOptions, gradeOptions, horaryOptions } from '../utils/data'
 import CustomSelect from '../components/CustomSelect'
 import CustomMultiSelect from '../components/CustomMultiSelect'
-import { createCentreValidation } from '../utils/data'
+import { centreValidation } from '../utils/data'
 import { sendCreatedCentre } from '../api/api'
+import { parseCentreFormValues } from '../utils/functions'
 
 const CreateCentre = () => {
   const formik = useFormik({
@@ -20,47 +21,16 @@ const CreateCentre = () => {
       pagelink: ''
     },
 
-    validationSchema: createCentreValidation(),
+    validationSchema: centreValidation(),
 
     onSubmit: (values) => {
-      const parsedValues = parseFormValues(values)
+      const parsedValues = parseCentreFormValues(values)
       sendCreatedCentre(parsedValues).then((response) => console.log(response) )
     }
   })
 
-  const parseFormValues = (values) => {
-    const gradeParsedValues = []
-    const cSchParsedValues = []
-    const careerParsedValues = []
-    Object.entries(values).forEach(([key ,value]) => {
-      if (key === 'grades') {
-        Object.entries(value).forEach(([,{ value }]) => {
-          gradeParsedValues.push(value)
-        })
-      }
-      if (key === 'centreSchedule') {
-        Object.entries(value).forEach(([,{ value }]) => {
-          cSchParsedValues.push(value)
-        })
-      }
-      if (key === 'careerParsedValues') {
-        Object.entries(value).forEach(([value ]) => {
-          careerParsedValues.push(value)
-        })
-      }
-    })
-    const data = {
-      ...values,
-      grades: gradeParsedValues,
-      centreSchedule: cSchParsedValues,
-      careers: careerParsedValues
-    }
-    console.log(data)
-    return data
-  }
-
   const getCareerData = (data) => {
-    formik.setFieldValue('careers', data)
+    formik.setFieldValue('careers', [data])
   }
 
   return (
@@ -239,8 +209,8 @@ const CreateCentre = () => {
             <button
               className={`text-white cursor-pointer ml-auto mr-24 ${
                 !formik.isValid && formik.submitCount > 0
-                  ? 'error-small-button'
-                  : 'normal-small-button '
+                  ? 'error-normal-button'
+                  : 'normal-button '
               }`}
               type="submit"
             >
