@@ -11,8 +11,8 @@ const AdminLogIn = () => {
   let navigate = useNavigate()
 
   const handleLogIn = ({ user, password }) => {
-    userValidation({ user, password }).then((response) => {
-      setValidationState(response)
+    userValidation( user, password ).then((response) => {
+     setValidationState(response)
     })
   }
   useEffect(() => {
