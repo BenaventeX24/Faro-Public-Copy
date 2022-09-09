@@ -32,3 +32,11 @@ export const parseCentreFormValues = (values) => {
   console.log(data)
   return data
 }
+
+export const checkIfExists = (data, item) => {
+   if (data.includes(item)){
+      return true
+   }else {
+      return false
+   }
+}

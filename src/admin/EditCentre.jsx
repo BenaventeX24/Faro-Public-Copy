@@ -1,16 +1,28 @@
 
-import React from 'react'
+import React,{ useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import AddCarrer from '../components/AddCareer'
 import { freeOptions, gradeOptions, horaryOptions } from '../utils/data'
 import CustomSelect from '../components/CustomSelect'
 import CustomMultiSelect from '../components/CustomMultiSelect'
 import { centreValidation } from '../utils/data'
-import { sendCreatedCentre } from '../api/api'
-import { parseCentreFormValues } from '../utils/functions'
+import { sendCreatedCentre, getCentresName, getCentreValues } from '../api/api'
+import { checkIfExists, parseCentreFormValues } from '../utils/functions'
 import SearchButton from '../components/searchButton'
 
 const EditCentre = () => {
+
+  const [centresNames, setCentresNames] = useState([])
+  const [centreValues, setCentreValues] = useState([])
+
+  useEffect(() => {
+    getCentresName()
+    .then((response) => {
+      setCentresNames(response.map((item) => 
+         item.centre_name))
+    })
+   }, []);
+
   const formik = useFormik({
     initialValues: {
       centreName: '',
@@ -30,7 +42,23 @@ const EditCentre = () => {
       sendCreatedCentre(parsedValues).then((response) => console.log(response) )
     }
   })
-
+  const searchCentreName = (searchValue) => {
+    checkIfExists(centresNames, searchValue) &&
+    getCentreValues(searchValue)
+    .then((response) => {
+      setCentreValues(response)
+      console.log(response)
+      // response.map((item) => console.log(item))
+      console.log(formik.initialValues)
+      Object.entries(response).forEach(([key], index ) => { 
+        // console.log(Object.entries(formik.initialValues)[index].includes(key))
+       if (Object.entries(formik.initialValues)[index].includes(key))
+        formik.setFieldValue(`${key}`, response[key])
+        //hacer ahi arriba que se iguale a key:)
+      })
+      console.log(formik.values)
+    })
+  }
   const getCareerData = (data) => {
     formik.setFieldValue('careers', [data])
   }
@@ -50,7 +78,10 @@ const EditCentre = () => {
               >
                 Nombre del centro a editar
               </label>
-              <SearchButton placeholder='Ingrese nombre del centro a editar'/>
+              <SearchButton placeholder='Ingrese nombre del centro a editar' 
+                centresName={centresNames} 
+                searchValue={searchCentreName}
+              />
             </div>
             <div className="w-4/5 flex flex-col row-start-2">
               <label
