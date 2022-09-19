@@ -1,5 +1,5 @@
-¿Que es ....?
-añadir desc de que es el proyecto coso
+## ¿Que es Faro?
+Faro es una simple solución a un problema muy común en nuestra sociedad, la deserción estudiantil, esta aplicación web es un proyecto de Ánima (Un bachillerato tecnológico en Uruguay) como parte de una solución a la deserción estudiantil, Faro busca mediante su aplicación web que el estudiante que tenga dudas sobre que estudiar, donde estudiar o directamente no lo sepa pueda encontrar un amparo y no deje de buscar que es lo que podría llegar a ser su profesión.
 
 ## ---- GIT FLOW ----
 
@@ -35,9 +35,7 @@ Despues vamos a github y hacemos el pr de la branch que acabamos de crear a `dev
 
 ## Tecnologias
 
-Front end `React` https://es.reactjs.org/docs/getting-started.html
-
-Back end `Node.js` https://nodejs.org/es/docs/
+`React` https://es.reactjs.org/docs/getting-started.html
 
 ## Libraries
 
@@ -46,3 +44,9 @@ Back end `Node.js` https://nodejs.org/es/docs/
 `Create React App` https://create-react-app.dev/docs/getting-started
 
 `React router` https://reactrouter.com/docs/en/v6/getting-started/tutorial
+
+`Formik` https://formik.org/
+
+`React-Modal` https://reactcommunity.org/react-modal/#general-usage example: https://www.npmjs.com/package/react-modal#api-documentation
+
+`React-Select` https://react-select.com/home
