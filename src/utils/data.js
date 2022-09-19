@@ -1,19 +1,18 @@
 import * as Yup from 'yup';
 
-export const createCentreValidation = () => Yup.object().shape({
+export const centreValidation = () => Yup.object().shape({
   centreName: Yup.string()
     .required('Porfavor ingrese el nombre del centro'),
-  centreDirection: Yup.string()
+  address: Yup.string()
     .required('Porfavor ingrese la dirección del centro'),
   free: Yup.boolean().nullable()
     .required('Porfavor ingrese el tipo del centro'),
   centrePhone: Yup.string()
     .min(8, 'Ingrese un numero correcto'),
-  grades: Yup.array()
-    .min(1, 'Porfavor ingrese al menos un grado')
+  schoolarLevel: Yup.string()
     .required('Porfavor ingrese los grados del centro'),
   centreSchedule: Yup.array()
-    .min(1, 'Porfavor ingrese al menos un horario')
+    .min(1, 'Porfavor ingrese almenos un horario')
     .required('Porfavor ingrese los horarios del centro'),
   careers: Yup.array().nullable()
     .min(1, 'Porfavor ingrese al menos una carrera')
@@ -34,13 +33,12 @@ export const AddCareerValidation = () => Yup.object().shape({
     .required('Porfavor ingrese la duracion de la carrera'),
 })
 
-export const gradeOptions = [
+export const schoolarLevelOptions = [
   { value: 'Sin elegir', label: 'sin elegir', isDisabled: true },
-  { value: '1ero bachillerato', label: '1ero bachillerato' },
-  { value: '2do bachillerato', label: '2do bachillerato' },
+  { value: 'Bachillerato', label: 'Bachillerato' },
   { value: 'Universitario', label: 'Universitario' }
 ]
-export const horaryOptions = [
+export const centreScheduleOptions = [
   { value: 'Sin elegir', label: 'sin elegir', isDisabled: true },
   { value: 'Vespertino', label: 'Vespertino' },
   { value: 'Matutino', label: 'Matutino' },

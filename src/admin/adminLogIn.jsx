@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { userValidation } from '../api/api'
-import farologo from '../assets/images/Farologo.png'
-import { isMobile } from '../utils/functions'
-import MobileErrorView from '../utils/mobileErrorView'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from "react"
+import { userValidation } from "../api/api"
+import farologo from "../assets/images/Farologo.png"
+import { isMobile } from "../utils/functions"
+import MobileErrorView from "../utils/mobileErrorView"
+import { useNavigate } from "react-router-dom"
 
 const AdminLogIn = () => {
   const [validationState, setValidationState] = useState()
@@ -17,10 +17,10 @@ const AdminLogIn = () => {
   }
   useEffect(() => {
     if (validationState) {
-      localStorage.setItem('islogged', true)
-      navigate('/database-filler')
+      localStorage.setItem("islogged", true)
+      navigate("/database-filler")
     } else {
-      localStorage.setItem('islogged', false)
+      localStorage.setItem("islogged", false)
     }
   }, [validationState, navigate])
 
@@ -29,7 +29,7 @@ const AdminLogIn = () => {
     const [username, password] = document.forms[0]
     handleLogIn({
       user: username.value,
-      password: password.value
+      password: password.value,
     })
   }
 

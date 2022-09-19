@@ -36,6 +36,22 @@ input[type='number'] {
   border-width: 3px;
   transition: 0.5s;
 }
+
+.error-normal-button {
+  background-color: var(--error-color);
+  padding: 13px 140px;
+  border-radius: 16px;
+  border: solid 3px var(--error-color);
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.error-normal-button:hover {
+  background-color: transparent;
+  border-color: var(--error-color);
+  border-width: 3px;
+  transition: 0.5s;
+}
 .normal-small-button {
   background-color: var(--primary-color);
   padding: 13px 40px;
@@ -90,7 +106,7 @@ input[type='number'] {
   background-color: rgba(14, 165, 233, 0.8);
 }
 
-.addCentreModal {
+.modal {
   position: absolute;
   top: 0;
   left: 0;
@@ -111,7 +127,7 @@ input[type='number'] {
   background-color: var(--opacity-black);
 }
 
-.addCentreModal:focus {
+.modal:focus {
   border: none;
 }
 

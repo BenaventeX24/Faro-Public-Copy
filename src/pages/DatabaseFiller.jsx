@@ -14,7 +14,7 @@ const DatabaseFiller = () => {
     if (centreFocus === 2) {
       return <EditCentre/>
     }
-    if (centreFocus == 3) {
+    if (centreFocus === 3) {
       return <DeleteCentre/>
     }
   }

@@ -32,5 +32,5 @@ CustomSelect.propTypes = {
   options: PropTypes.array,
   placeholder: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.bool
+  value: PropTypes.any
 }
