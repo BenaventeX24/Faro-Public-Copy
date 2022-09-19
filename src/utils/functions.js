@@ -3,7 +3,6 @@ export const isMobile = () => {
 }
 
 export const parseCentreFormValues = (values) => {
-  const gradeParsedValues = []
   const cSchParsedValues = []
   const careerParsedValues = []
   Object.entries(values).forEach(([key ,value]) => {

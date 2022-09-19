@@ -30,7 +30,6 @@ const CreateCentre = () => {
     validationSchema: centreValidation(),
 
     onSubmit: (values) => {
-      console.log(values)
       const parsedValues = parseCentreFormValues(values)
       sendCreatedCentre(parsedValues).then((response) => console.log(response))
     },

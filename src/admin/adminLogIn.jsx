@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useInsertionEffect, useState } from "react"
 import { userValidation } from "../api/api"
 import farologo from "../assets/images/Farologo.png"
 import { isMobile } from "../utils/functions"
@@ -12,7 +12,12 @@ const AdminLogIn = () => {
 
   const handleLogIn = ({ user, password }) => {
     userValidation( user, password ).then((response) => {
-     setValidationState(response)
+      if (response.LOGIN_FAILED) {
+        setValidationState(false)
+      }else{
+       setValidationState(true)
+       localStorage.setItem("token", response)
+      }
     })
   }
   useEffect(() => {

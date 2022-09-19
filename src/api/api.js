@@ -1,5 +1,5 @@
 const BASE_URL = process.env.REACT_APP_BASE_URL
-const devToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaXNzdWVkIjoxNjYzNTQzNTEwODAyLCJleHBpcmVzIjoxNjYzNTQ0NDEwODAyfQ.Rr5jaZT_mkW5NJPUAmgloh-P8Z-cOl8UNUuLf4DAHEm0Iw0oeo0d1Wd0icIZ8nZwxoWozOLyKK9hJBmLoPyzPg'
+const devToken = localStorage.getItem("token")
 
 export const userValidation = (user, password) => {
   return fetch(`${BASE_URL}/login`, {
@@ -7,7 +7,6 @@ export const userValidation = (user, password) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-JWT-Token': devToken
     },
     body: JSON.stringify({
       username: user,
