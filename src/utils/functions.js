@@ -7,29 +7,22 @@ export const parseCentreFormValues = (values) => {
   const cSchParsedValues = []
   const careerParsedValues = []
   Object.entries(values).forEach(([key ,value]) => {
-    if (key === 'grades') {
-      Object.entries(value).forEach(([,{ value }]) => {
-        gradeParsedValues.push(value)
-      })
-    }
     if (key === 'centreSchedule') {
       Object.entries(value).forEach(([,{ value }]) => {
         cSchParsedValues.push(value)
       })
     }
-    if (key === 'careerParsedValues') {
-      Object.entries(value).forEach(([value ]) => {
+    if (key === 'careers') {
+      Object.entries(value).forEach(([,value]) => {
         careerParsedValues.push(value)
       })
     }
   })
   const data = {
     ...values,
-    grades: gradeParsedValues,
     centreSchedule: cSchParsedValues,
     careers: careerParsedValues
   }
-  console.log(data)
   return data
 }
 

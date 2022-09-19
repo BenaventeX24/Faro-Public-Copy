@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import React, { useState, useEffect } from "react";
 
-const SearchButton = ({ placeholder, centresName, searchValue }) => {
+const SearchButton = ({ placeholder, centresName, searchValue, className }) => {
   const [search, setSearch] = useState("");
   const [showCentres, setShowCentres] = useState(false)
 
@@ -12,8 +12,8 @@ const SearchButton = ({ placeholder, centresName, searchValue }) => {
 
   const results = !search
     ? centresName
-    : centresName?.filter((dato) =>
-        dato?.toLowerCase().includes(search?.toLocaleLowerCase())
+    : centresName?.filter((item) =>
+        item?.toLowerCase().includes(search?.toLocaleLowerCase())
       );
 
   const handleSearch = (e) => {
@@ -27,7 +27,7 @@ const SearchButton = ({ placeholder, centresName, searchValue }) => {
   }
 
   return (
-    <div className="dropdown flex w-full h-11 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between">
+    <div className={className}>
       <input
         value={search}
         onChange={handleSearch}
@@ -43,7 +43,7 @@ const SearchButton = ({ placeholder, centresName, searchValue }) => {
       {(showCentres) && (
         <div className="w-full bg-blackOpacity z-10 dropdown-content">
           {results.map((item) => (
-            <div className="flex justify-between hoverBg" key={item } onClick={() => handleClick(item)}>
+            <div className="flex justify-between hoverBg" key={item} onClick={() => handleClick(item)}>
               <p className="py-1 pl-2" key={item}>
                 {item}
               </p>

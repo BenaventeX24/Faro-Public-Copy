@@ -1,71 +1,65 @@
-
-import React,{ useEffect, useState } from 'react'
-import { useFormik } from 'formik'
-import AddCarrer from '../components/AddCareer'
-import { freeOptions, gradeOptions, horaryOptions } from '../utils/data'
-import CustomSelect from '../components/CustomSelect'
-import CustomMultiSelect from '../components/CustomMultiSelect'
-import { centreValidation } from '../utils/data'
-import { sendCreatedCentre, getCentresName, getCentreValues } from '../api/api'
-import { checkIfExists, parseCentreFormValues } from '../utils/functions'
-import SearchButton from '../components/searchButton'
+import React, { useEffect, useState } from "react"
+import { useFormik } from "formik"
+import AddCarrer from "../components/AddCareer"
+import {freeOptions, schoolarLevelOptions, centreScheduleOptions} from "../utils/data"
+import CustomSelect from "../components/CustomSelect"
+import { centreValidation } from "../utils/data"
+import { getCentresName, getCentreValues } from "../api/api"
+import { checkIfExists, parseCentreFormValues } from "../utils/functions"
+import SearchButton from "../components/searchButton"
+import CustomMultiSelect from "../components/CustomMultiSelect"
 
 const EditCentre = () => {
-
   const [centresNames, setCentresNames] = useState([])
-  const [centreValues, setCentreValues] = useState([])
+  // const [centreValues, setCentreValues] = useState([]);
+  const [careers, setCareers] = useState([])
 
   useEffect(() => {
-    getCentresName()
-    .then((response) => {
-      setCentresNames(response.map((item) => 
-         item.centre_name))
+    getCentresName().then((response) => {
+      setCentresNames(response.map((item) => item.centreName))
     })
-   }, []);
+  }, [])
 
   const formik = useFormik({
     initialValues: {
-      centreName: '',
-      centreDirection: '',
+      centreName: "",
+      address: "",
       free: null,
-      centrePhone: '',
-      grades: [],
+      centrePhone: "",
+      schoolarLevel: [],
       centreSchedule: [],
       careers: {},
-      pagelink: ''
+      pagelink: "",
     },
 
     validationSchema: centreValidation(),
 
     onSubmit: (values) => {
       const parsedValues = parseCentreFormValues(values)
-      sendCreatedCentre(parsedValues).then((response) => console.log(response) )
-    }
+    },
   })
-  const searchCentreName = (searchValue) => {
-    checkIfExists(centresNames, searchValue) &&
-    getCentreValues(searchValue)
-    .then((response) => {
-      setCentreValues(response)
-      console.log(response)
-      // response.map((item) => console.log(item))
-      console.log(formik.initialValues)
-      Object.entries(response).forEach(([key], index ) => { 
-        // console.log(Object.entries(formik.initialValues)[index].includes(key))
-       if (Object.entries(formik.initialValues)[index].includes(key))
-        formik.setFieldValue(`${key}`, response[key])
-        //hacer ahi arriba que se iguale a key:)
+  const searchCentreName = async (searchValue) => {
+    if (checkIfExists(centresNames, searchValue)) {
+      const values = await getCentreValues(searchValue)
+      Object.entries(values).forEach((item) => {
+        formik.setFieldValue(item[0], item[1])
+        if (item[0] === "careers") {
+          setCareers(item[1])
+        }
+        if (item[0] === "centreSchedule") {
+          formik.setFieldValue(item[0], [{ value: item[1], label: item[1] }])
+        }
       })
-      console.log(formik.values)
-    })
+    }
   }
   const getCareerData = (data) => {
-    formik.setFieldValue('careers', [data])
+    setCareers((item) => [...item, data])
+    formik.setFieldValue("careers", careers)
   }
 
   return (
-    <div className='w-85% h-full bg-firstBg'>
-        <div className="w-95% h-full ml-auto">
+    <div className="w-85% h-full bg-firstBg">
+      <div className="w-95% h-full ml-auto">
         <form className="w-full h-full" onSubmit={formik.handleSubmit}>
           <div className="w-full h-1/5 flex items-center">
             <h1 className="text-4xl ">Editar centro</h1>
@@ -78,8 +72,12 @@ const EditCentre = () => {
               >
                 Nombre del centro a editar
               </label>
-              <SearchButton placeholder='Ingrese nombre del centro a editar' 
-                centresName={centresNames} 
+              <SearchButton
+                placeholder="Ingrese nombre del centro a editar"
+                centresName={centresNames}
+                className={
+                  "dropdown flex w-full h-11 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between"
+                }
                 searchValue={searchCentreName}
               />
             </div>
@@ -107,24 +105,21 @@ const EditCentre = () => {
               )}
             </div>
             <div className="w-4/5 flex flex-col row-start-2">
-              <label
-                className="text-base font-normal mb-2"
-                htmlFor="centreDirection"
-              >
+              <label className="text-base font-normal mb-2" htmlFor="address">
                 Dirección
               </label>
               <input
                 className="w-full h-11 pl-4 bg-secondBg rounded-md border-2 border-firstColor"
-                name="centreDirection"
+                name="address"
                 placeholder="Agregar dirección del centro"
                 onChange={formik.handleChange}
-                value={formik.values.centreDirection}
+                value={formik.values.address}
                 type="text"
               />
-              {formik.touched.centreDirection && formik.errors.centreDirection && (
+              {formik.touched.address && formik.errors.address && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.centreDirection}
+                    {formik.errors.address}
                   </p>
                 </div>
               )}
@@ -134,11 +129,11 @@ const EditCentre = () => {
                 Privado/Publico
               </label>
               <CustomSelect
-                name={'grades'}
+                name={"free"}
                 options={freeOptions}
                 value={formik.values.free}
-                onChange={(value) => formik.setFieldValue('free', value.value)}
-                placeholder={'Agregar el precio del centro'}
+                onChange={(value) => formik.setFieldValue("free", value.value)}
+                placeholder={"Agregar el precio del centro"}
               />
               {formik.touched.free && formik.errors.free && (
                 <div className="relative">
@@ -170,38 +165,46 @@ const EditCentre = () => {
               )}
             </div>
             <div className="w-4/5 flex flex-col row-start-4">
-              <label className="text-base font-normal mb-2" htmlFor="grades">
+              <label
+                className="text-base font-normal mb-2"
+                htmlFor="schoolarLevel"
+              >
                 Grado
               </label>
-              <CustomMultiSelect
-                defaultValue="no select"
-                name={'grades'}
-                isMulti
-                options={gradeOptions}
-                value={formik.values.grades}
-                onChange={(value) => formik.setFieldValue('grades', value)}
-                placeholder={'Agregar los grados del centro'}
+              <CustomSelect
+                name={"schoolarLevel"}
+                options={schoolarLevelOptions}
+                value={formik.values.schoolarLevel}
+                onChange={(value) =>
+                  formik.setFieldValue("schoolarLevel", value.value)
+                }
+                placeholder={"Agregar el grado del centro"}
               />
-              {formik.touched.grades && formik.errors.grades && (
+              {formik.touched.schoolarLevel && formik.errors.schoolarLevel && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.grades}
+                    {formik.errors.schoolarLevel}
                   </p>
                 </div>
               )}
             </div>
             <div className="w-4/5 flex flex-col row-start-4">
-              <label className="text-base font-normal mb-2" htmlFor="centreSchedule">
+              <label
+                className="text-base font-normal mb-2"
+                htmlFor="centreSchedule"
+              >
                 Horarios
               </label>
               <CustomMultiSelect
                 defaultValue="no select"
-                name={'centreSchedule'}
+                name={"centreSchedule"}
                 isMulti
-                options={horaryOptions}
+                options={centreScheduleOptions}
                 value={formik.values.centreSchedule}
-                onChange={(value) => formik.setFieldValue('centreSchedule', value)}
-                placeholder={'Agregar los horarios del centro'}
+                onChange={(value) =>
+                  formik.setFieldValue("centreSchedule", value)
+                }
+                placeholder={"Agregar los horarios del centro"}
               />
               {formik.touched.centreSchedule && formik.errors.centreSchedule && (
                 <div className="relative">
@@ -217,7 +220,7 @@ const EditCentre = () => {
                 <p className="text-placeHolderColor text-base my-auto pl-4">
                   Añadir carrera
                 </p>
-                <AddCarrer onSubmit={getCareerData} />
+                <AddCarrer onSubmit={getCareerData} careers={careers} />
               </div>
               {formik.touched.careers && formik.errors.careers && (
                 <div className="relative">
@@ -251,8 +254,8 @@ const EditCentre = () => {
             <button
               className={`text-white cursor-pointer ml-auto mr-24 ${
                 !formik.isValid && formik.submitCount > 0
-                  ? 'error-normal-button'
-                  : 'normal-button '
+                  ? "error-normal-button"
+                  : "normal-button "
               }`}
               type="submit"
             >
@@ -260,8 +263,7 @@ const EditCentre = () => {
             </button>
           </div>
         </form>
-
-        </div>
+      </div>
     </div>
   )
 }

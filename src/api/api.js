@@ -1,5 +1,5 @@
 const BASE_URL = process.env.REACT_APP_BASE_URL
-const devToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaXNzdWVkIjoxNjYyNzUxMDYyMjMxLCJleHBpcmVzIjoxNjYyNzUxOTYyMjMxfQ.Z4Rsp8SayRWJ1kMc4jfXSbVhBboSs6Ni3ZC-meRkwfexmCQ2BudJB9OijjeeKcRirWNLoiSsHyA_hIB1dKIXLg'
+const devToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaXNzdWVkIjoxNjYzNTQzNTEwODAyLCJleHBpcmVzIjoxNjYzNTQ0NDEwODAyfQ.Rr5jaZT_mkW5NJPUAmgloh-P8Z-cOl8UNUuLf4DAHEm0Iw0oeo0d1Wd0icIZ8nZwxoWozOLyKK9hJBmLoPyzPg'
 
 export const userValidation = (user, password) => {
   return fetch(`${BASE_URL}/login`, {
@@ -18,7 +18,7 @@ export const userValidation = (user, password) => {
 
 export const requestCentre = async (path, method, body) => 
   await fetch( `${BASE_URL}/${path}`, {
-    method,
+    method: method,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

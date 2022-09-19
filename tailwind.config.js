@@ -39,12 +39,13 @@ module.exports = {
       },
       colors: {
        'firstColor': '#0EA5E9',
-        'firstBg': '#20233C',
-        'secondBg': '#383B50',
-        'errorsColor': '#D83A52',
+       'firstBg': '#20233C',
+       'secondBg': '#383B50',
+       'errorsColor': '#D83A52',
        'grayColor:': '#C5C7D0',
        'placeHolderColor': '#9CA3AF',
-       'blackOpacity' : 'rgba(0, 0, 0,.8)',
+       'blackOpacity': 'rgba(0, 0, 0,.8)',
+       'alertColor': '#EE9B00'
       }
     }
   },

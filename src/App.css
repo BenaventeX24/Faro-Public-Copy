@@ -106,7 +106,7 @@ input[type='number'] {
   background-color: rgba(14, 165, 233, 0.8);
 }
 
-.addCentreModal {
+.modal {
   position: absolute;
   top: 0;
   left: 0;
@@ -127,7 +127,7 @@ input[type='number'] {
   background-color: var(--opacity-black);
 }
 
-.addCentreModal:focus {
+.modal:focus {
   border: none;
 }
 

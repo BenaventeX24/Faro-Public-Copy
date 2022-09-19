@@ -1,36 +1,44 @@
-import React from 'react'
-import AddCarrer from '../components/AddCareer'
-import { useFormik } from 'formik'
-import { freeOptions, gradeOptions, horaryOptions } from '../utils/data'
-import CustomSelect from '../components/CustomSelect'
-import CustomMultiSelect from '../components/CustomMultiSelect'
-import { centreValidation } from '../utils/data'
-import { sendCreatedCentre } from '../api/api'
-import { parseCentreFormValues } from '../utils/functions'
+import React, { useState } from "react"
+import AddCarrer from "../components/AddCareer"
+import { useFormik } from "formik"
+import {
+  freeOptions,
+  schoolarLevelOptions,
+  centreScheduleOptions,
+} from "../utils/data"
+import CustomSelect from "../components/CustomSelect"
+import CustomMultiSelect from "../components/CustomMultiSelect"
+import { centreValidation } from "../utils/data"
+import { sendCreatedCentre } from "../api/api"
+import { parseCentreFormValues } from "../utils/functions"
 
 const CreateCentre = () => {
+  const [careers, setCareers] = useState([])
+
   const formik = useFormik({
     initialValues: {
-      centreName: '',
-      centreDirection: '',
+      centreName: "",
+      address: "",
       free: null,
-      centrePhone: '',
-      grades: [],
+      centrePhone: "",
+      schoolarLevel: [],
       centreSchedule: [],
       careers: {},
-      pagelink: ''
+      pagelink: "",
     },
 
     validationSchema: centreValidation(),
 
     onSubmit: (values) => {
+      console.log(values)
       const parsedValues = parseCentreFormValues(values)
-      sendCreatedCentre(parsedValues).then((response) => console.log(response) )
-    }
+      sendCreatedCentre(parsedValues).then((response) => console.log(response))
+    },
   })
 
   const getCareerData = (data) => {
-    formik.setFieldValue('careers', [data])
+    setCareers((item) => [...item, data])
+    formik.setFieldValue("careers", careers)
   }
 
   return (
@@ -65,24 +73,21 @@ const CreateCentre = () => {
               )}
             </div>
             <div className="w-4/5 flex flex-col">
-              <label
-                className="text-base font-normal mb-2"
-                htmlFor="centreDirection"
-              >
+              <label className="text-base font-normal mb-2" htmlFor="address">
                 Dirección
               </label>
               <input
                 className="w-full h-11 pl-4 bg-secondBg rounded-md border-2 border-firstColor"
-                name="centreDirection"
+                name="address"
                 placeholder="Agregar dirección del centro"
                 onChange={formik.handleChange}
-                value={formik.values.centreDirection}
+                value={formik.values.address}
                 type="text"
               />
-              {formik.touched.centreDirection && formik.errors.centreDirection && (
+              {formik.touched.address && formik.errors.address && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.centreDirection}
+                    {formik.errors.address}
                   </p>
                 </div>
               )}
@@ -92,11 +97,11 @@ const CreateCentre = () => {
                 Privado/Publico
               </label>
               <CustomSelect
-                name={'grades'}
+                name={"free"}
                 options={freeOptions}
                 value={formik.values.free}
-                onChange={(value) => formik.setFieldValue('free', value.value)}
-                placeholder={'Agregar el precio del centro'}
+                onChange={(value) => formik.setFieldValue("free", value.value)}
+                placeholder={"Agregar el precio del centro"}
               />
               {formik.touched.free && formik.errors.free && (
                 <div className="relative">
@@ -128,38 +133,46 @@ const CreateCentre = () => {
               )}
             </div>
             <div className="w-4/5 flex flex-col">
-              <label className="text-base font-normal mb-2" htmlFor="grades">
+              <label
+                className="text-base font-normal mb-2"
+                htmlFor="schoolarLevel"
+              >
                 Grado
               </label>
-              <CustomMultiSelect
-                defaultValue="no select"
-                name={'grades'}
-                isMulti
-                options={gradeOptions}
-                value={formik.values.grades}
-                onChange={(value) => formik.setFieldValue('grades', value)}
-                placeholder={'Agregar los grados del centro'}
+              <CustomSelect
+                name={"schoolarLevel"}
+                options={schoolarLevelOptions}
+                value={formik.values.schoolarLevel}
+                onChange={(value) =>
+                  formik.setFieldValue("schoolarLevel", value.value)
+                }
+                placeholder={"Agregar el grado del centro"}
               />
-              {formik.touched.grades && formik.errors.grades && (
+              {formik.touched.schoolarLevel && formik.errors.schoolarLevel && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.grades}
+                    {formik.errors.schoolarLevel}
                   </p>
                 </div>
               )}
             </div>
             <div className="w-4/5 flex flex-col">
-              <label className="text-base font-normal mb-2" htmlFor="centreSchedule">
+              <label
+                className="text-base font-normal mb-2"
+                htmlFor="centreSchedule"
+              >
                 Horarios
               </label>
               <CustomMultiSelect
                 defaultValue="no select"
-                name={'centreSchedule'}
+                name={"centreSchedule"}
                 isMulti
-                options={horaryOptions}
+                options={centreScheduleOptions}
                 value={formik.values.centreSchedule}
-                onChange={(value) => formik.setFieldValue('centreSchedule', value)}
-                placeholder={'Agregar los horarios del centro'}
+                onChange={(value) =>
+                  formik.setFieldValue("centreSchedule", value)
+                }
+                placeholder={"Agregar los horarios del centro"}
               />
               {formik.touched.centreSchedule && formik.errors.centreSchedule && (
                 <div className="relative">
@@ -209,8 +222,8 @@ const CreateCentre = () => {
             <button
               className={`text-white cursor-pointer ml-auto mr-24 ${
                 !formik.isValid && formik.submitCount > 0
-                  ? 'error-normal-button'
-                  : 'normal-button '
+                  ? "error-normal-button"
+                  : "normal-button "
               }`}
               type="submit"
             >
