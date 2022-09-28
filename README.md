@@ -45,6 +45,8 @@ Despues vamos a github y hacemos el pr de la branch que acabamos de crear a `dev
 
 ## Libraries
 
+Back:
+
 `Body parser` https://apuntes.de/nodejs-desarrollo-web/body-parser/#gsc.tab=0
 
 `cors` https://expressjs.com/en/resources/middleware/cors.html
@@ -58,6 +60,8 @@ Despues vamos a github y hacemos el pr de la branch que acabamos de crear a `dev
 `mysql` https://www.npmjs.com/package/mysql
 
 `mysql2` https://www.npmjs.com/package/mysql2
+
+Front:
 
 `Create React App` https://create-react-app.dev/docs/getting-started
 
