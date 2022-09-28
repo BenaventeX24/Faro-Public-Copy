@@ -8,11 +8,14 @@ import { getCentresName, getCentreValues } from "../api/api"
 import { checkIfExists, parseCentreFormValues } from "../utils/functions"
 import SearchButton from "../components/searchButton"
 import CustomMultiSelect from "../components/CustomMultiSelect"
+import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
+
 
 const EditCentre = () => {
   const [centresNames, setCentresNames] = useState([])
-  // const [centreValues, setCentreValues] = useState([]);
+  const [centreValues, setCentreValues] = useState([]);
   const [careers, setCareers] = useState([])
+  const [showCareers, setShowCareers] = useState(false);
 
   useEffect(() => {
     getCentresName().then((response) => {
@@ -41,6 +44,7 @@ const EditCentre = () => {
   const searchCentreName = async (searchValue) => {
     if (checkIfExists(centresNames, searchValue)) {
       const values = await getCentreValues(searchValue)
+      setCentreValues(values)
       Object.entries(values).forEach((item) => {
         formik.setFieldValue(item[0], item[1])
         if (item[0] === "careers") {
@@ -216,11 +220,27 @@ const EditCentre = () => {
             </div>
             <div className="w-4/5 flex flex-col row-start-5">
               <h1 className="text-base font-normal">Carreras</h1>
-              <div className="flex w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between">
-                <p className="text-placeHolderColor text-base my-auto pl-4">
-                  Añadir carrera
-                </p>
-                <AddCarrer onSubmit={getCareerData} careers={careers} />
+              <div className="flex flex-col">
+                <div className="flex items-center w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white">
+                  <p className="text-placeHolderColor text-base my-auto pl-4">
+                    Añadir carrera
+                  </p>
+                  {careers.length > 0 && 
+                    <ChevronDownIcon className="w-8 ml-auto" onClick={() => setShowCareers(!showCareers)}/>
+                  }
+                  <AddCarrer onSubmit={getCareerData} />
+                  {showCareers && (<div className="w-full bg-blackOpacity z-10 dropdown-content">
+                    {careers.map(({careerName}) => (
+                      <div key={careerName} className="flex">
+                        <p className="text-white">{careerName}</p>
+                        <MinusIcon onClick={() => setCareers(
+                           careers.filter((item) => item.careerName !== careerName)
+                        )} className="w-8 ml-auto"/>
+                      </div>)
+                      )
+                    }
+                  </div>)}
+                </div>
               </div>
               {formik.touched.careers && formik.errors.careers && (
                 <div className="relative">

@@ -1,4 +1,4 @@
-import React, { useEffect, useInsertionEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { userValidation } from "../api/api"
 import farologo from "../assets/images/Farologo.png"
 import { isMobile } from "../utils/functions"

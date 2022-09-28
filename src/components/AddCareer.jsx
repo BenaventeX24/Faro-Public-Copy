@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import { Formik, Field, Form } from 'formik'
@@ -11,12 +11,6 @@ const AddCareer = (props) => {
   const [keywords, setKeyWords] = useState([])
   const [showSelect, setShowSelect] = useState(false)
   const inputRef = useRef(null)
-
-  // useEffect(() =>{
-  //   if(props.careers){
-  //     Formik.values(props.careers)
-  //   }
-  // },[props.careers])
 
   const addKeyword = () => {
     const keyword = inputRef.current.value
