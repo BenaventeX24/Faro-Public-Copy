@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { useFormik } from "formik"
 import AddCarrer from "../components/AddCareer"
-import {freeOptions, schoolarLevelOptions, centreScheduleOptions} from "../utils/data"
+import {
+  freeOptions,
+  schoolarLevelOptions,
+  centreScheduleOptions,
+} from "../utils/data"
 import CustomSelect from "../components/CustomSelect"
 import { centreValidation } from "../utils/data"
-import { getCentresName, getCentreValues } from "../api/api"
+import { getCentresName, getCentreValues, requestCentre } from "../api/api"
 import { checkIfExists, parseCentreFormValues } from "../utils/functions"
 import SearchButton from "../components/searchButton"
 import CustomMultiSelect from "../components/CustomMultiSelect"
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
 
-
 const EditCentre = () => {
   const [centresNames, setCentresNames] = useState([])
-  const [centreValues, setCentreValues] = useState([]);
+  const [centreValues, setCentreValues] = useState([])
   const [careers, setCareers] = useState([])
-  const [showCareers, setShowCareers] = useState(false);
+  const [showCareers, setShowCareers] = useState(false)
 
   useEffect(() => {
     getCentresName().then((response) => {
@@ -61,6 +64,19 @@ const EditCentre = () => {
     formik.setFieldValue("careers", careers)
   }
 
+  const deleteCareer = (careerName) => {
+    setCareers(
+      careers.filter((career) => {
+        if (career.careerName === careerName) {
+          requestCentre(
+            `careers/career?idCareer=${career.idCareer}&idCentre=${centreValues.idCentre}`,
+            "DELETE"
+          )
+        }
+        return career.careerName !== careerName
+      })
+    )
+  }
   return (
     <div className="w-85% h-full bg-firstBg">
       <div className="w-95% h-full ml-auto">
@@ -221,25 +237,32 @@ const EditCentre = () => {
             <div className="w-4/5 flex flex-col row-start-5">
               <h1 className="text-base font-normal">Carreras</h1>
               <div className="flex flex-col">
-                <div className="flex items-center w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white">
+                <div className="flex items-center w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white dropdown">
                   <p className="text-placeHolderColor text-base my-auto pl-4">
                     Añadir carrera
                   </p>
-                  {careers.length > 0 && 
-                    <ChevronDownIcon className="w-8 ml-auto" onClick={() => setShowCareers(!showCareers)}/>
-                  }
-                  <AddCarrer onSubmit={getCareerData} />
-                  {showCareers && (<div className="w-full bg-blackOpacity z-10 dropdown-content">
-                    {careers.map(({careerName}) => (
-                      <div key={careerName} className="flex">
-                        <p className="text-white">{careerName}</p>
-                        <MinusIcon onClick={() => setCareers(
-                           careers.filter((item) => item.careerName !== careerName)
-                        )} className="w-8 ml-auto"/>
-                      </div>)
-                      )
-                    }
-                  </div>)}
+                  <div className="flex items-center ml-auto">
+                    {careers.length > 0 && (
+                      <ChevronDownIcon
+                        className="w-8 ml-auto"
+                        onClick={() => setShowCareers(!showCareers)}
+                      />
+                    )}
+                    <AddCarrer onSubmit={getCareerData} />
+                  </div>
+                  {showCareers && (
+                    <div className="w-full bg-blackOpacity z-10 dropdown-content">
+                      {careers.map(({ careerName }) => (
+                        <div key={careerName} className="flex">
+                          <p className="text-white">{careerName}</p>
+                          <MinusIcon
+                            onClick={() => deleteCareer(careerName)}
+                            className="w-8 ml-auto"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               {formik.touched.careers && formik.errors.careers && (
