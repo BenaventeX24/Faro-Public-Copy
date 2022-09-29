@@ -36,16 +36,14 @@ const EditCentre = () => {
       address: "",
       free: null,
       centrePhone: "",
-      schoolarLevel: [],
+      schoolarLevel: "",
       centreSchedules: [],
       careers: {},
-      pagelink: "",
     },
 
     validationSchema: centreValidation(),
 
     onSubmit: (values) => {
-      // console.log("values",values)
       const parsedValues = parseCentreFormValues(values)
       console.log(parsedValues)
     },
@@ -66,9 +64,7 @@ const EditCentre = () => {
     }
   }
   const getCareerData = (data) => {
-    // console.log("data",data)
     setCareers((item) => [...item, data])
-    // console.log("careers",careers)
   }
 
   const deleteCareer = (careerName) => {
@@ -277,25 +273,6 @@ const EditCentre = () => {
                 <div className="relative">
                   <p className="errorMessage absolute">
                     {formik.errors.careers}
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="w-4/5 flex flex-col row-start-5">
-              <label className="text-base font-normal mb-2" htmlFor="pagelink">
-                Link a la página
-              </label>
-              <input
-                className="w-full h-11 pl-4 bg-secondBg rounded-md border-2 border-firstColor"
-                name="pagelink"
-                placeholder="Agregar página del centro"
-                onChange={formik.handleChange}
-                value={formik.values.pagelink}
-              />
-              {formik.touched.pagelink && formik.errors.pagelink && (
-                <div className="relative">
-                  <p className="errorMessage absolute">
-                    {formik.errors.pagelink}
                   </p>
                 </div>
               )}

@@ -61,7 +61,6 @@ const AddCareer = ({onClick}) => {
             validationSchema={AddCareerValidation}
         
             onSubmit={(values, actions) => {
-              console.log(values)
               handleSubmit(values)
               actions.resetForm()
               setRepeatedKeyWord(undefined)
