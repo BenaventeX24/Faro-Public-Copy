@@ -11,7 +11,7 @@ export const centreValidation = () => Yup.object().shape({
     .min(8, 'Ingrese un numero correcto'),
   schoolarLevel: Yup.string()
     .required('Porfavor ingrese los grados del centro'),
-  centreSchedule: Yup.array()
+  centreSchedules: Yup.array()
     .min(1, 'Porfavor ingrese almenos un horario')
     .required('Porfavor ingrese los horarios del centro'),
   careers: Yup.array().nullable()

@@ -26,6 +26,10 @@ const EditCentre = () => {
     })
   }, [])
 
+  useEffect(() => {
+    formik.setFieldValue("careers", careers)
+  }, [careers])
+  
   const formik = useFormik({
     initialValues: {
       centreName: "",
@@ -33,7 +37,7 @@ const EditCentre = () => {
       free: null,
       centrePhone: "",
       schoolarLevel: [],
-      centreSchedule: [],
+      centreSchedules: [],
       careers: {},
       pagelink: "",
     },
@@ -41,7 +45,9 @@ const EditCentre = () => {
     validationSchema: centreValidation(),
 
     onSubmit: (values) => {
+      // console.log("values",values)
       const parsedValues = parseCentreFormValues(values)
+      console.log(parsedValues)
     },
   })
   const searchCentreName = async (searchValue) => {
@@ -53,15 +59,16 @@ const EditCentre = () => {
         if (item[0] === "careers") {
           setCareers(item[1])
         }
-        if (item[0] === "centreSchedule") {
+        if (item[0] === "centreSchedules") {
           formik.setFieldValue(item[0], [{ value: item[1], label: item[1] }])
         }
       })
     }
   }
   const getCareerData = (data) => {
+    // console.log("data",data)
     setCareers((item) => [...item, data])
-    formik.setFieldValue("careers", careers)
+    // console.log("careers",careers)
   }
 
   const deleteCareer = (careerName) => {
@@ -77,6 +84,7 @@ const EditCentre = () => {
       })
     )
   }
+  
   return (
     <div className="w-85% h-full bg-firstBg">
       <div className="w-95% h-full ml-auto">
@@ -211,25 +219,25 @@ const EditCentre = () => {
             <div className="w-4/5 flex flex-col row-start-4">
               <label
                 className="text-base font-normal mb-2"
-                htmlFor="centreSchedule"
+                htmlFor="centreSchedules"
               >
                 Horarios
               </label>
               <CustomMultiSelect
                 defaultValue="no select"
-                name={"centreSchedule"}
+                name={"centreSchedules"}
                 isMulti
                 options={centreScheduleOptions}
-                value={formik.values.centreSchedule}
+                value={formik.values.centreSchedules}
                 onChange={(value) =>
-                  formik.setFieldValue("centreSchedule", value)
+                  formik.setFieldValue("centreSchedules", value)
                 }
                 placeholder={"Agregar los horarios del centro"}
               />
-              {formik.touched.centreSchedule && formik.errors.centreSchedule && (
+              {formik.touched.centreSchedules && formik.errors.centreSchedules && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.centreSchedule}
+                    {formik.errors.centreSchedules}
                   </p>
                 </div>
               )}
@@ -248,7 +256,7 @@ const EditCentre = () => {
                         onClick={() => setShowCareers(!showCareers)}
                       />
                     )}
-                    <AddCarrer onSubmit={getCareerData} />
+                    <AddCarrer onClick={getCareerData} />
                   </div>
                   {showCareers && (
                     <div className="w-full bg-blackOpacity z-10 dropdown-content">
