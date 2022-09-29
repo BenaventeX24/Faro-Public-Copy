@@ -5,7 +5,7 @@ import { Formik, Field, Form } from 'formik'
 import { ChevronDownIcon, MinusIcon, PlusIcon } from '@heroicons/react/outline'
 import { AddCareerValidation } from '../utils/data'
 
-const AddCareer = (props) => {
+const AddCareer = ({onClick}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [repeatedKeyWord, setRepeatedKeyWord] = useState(false)
   const [keywords, setKeyWords] = useState([])
@@ -27,7 +27,7 @@ const AddCareer = (props) => {
 
   const handleSubmit = (formValues) => {
     const carreerFormKeywords = { ...formValues, keyword: keywords }
-    props.onSubmit(carreerFormKeywords)
+    onClick(carreerFormKeywords)
   }
 
   Modal.setAppElement('#root')

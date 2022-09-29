@@ -11,15 +11,12 @@ export const centreValidation = () => Yup.object().shape({
     .min(8, 'Ingrese un numero correcto'),
   schoolarLevel: Yup.string()
     .required('Porfavor ingrese los grados del centro'),
-  centreSchedule: Yup.array()
+  centreSchedules: Yup.array()
     .min(1, 'Porfavor ingrese almenos un horario')
     .required('Porfavor ingrese los horarios del centro'),
   careers: Yup.array().nullable()
     .min(1, 'Porfavor ingrese al menos una carrera')
-    .required('Porfavor ingrese al menos una carrera al centro'),
-  pagelink: Yup.string().matches(
-    /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-    'Ingrese una url correcta')
+    .required('Porfavor ingrese al menos una carrera al centro')
 })
 
 export const AddCareerValidation = () => Yup.object().shape({

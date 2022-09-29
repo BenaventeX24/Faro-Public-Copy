@@ -6,7 +6,7 @@ export const parseCentreFormValues = (values) => {
   const cSchParsedValues = []
   const careerParsedValues = []
   Object.entries(values).forEach(([key ,value]) => {
-    if (key === 'centreSchedule') {
+    if (key === 'centreSchedules') {
       Object.entries(value).forEach(([,{ value }]) => {
         cSchParsedValues.push(value)
       })
@@ -19,7 +19,7 @@ export const parseCentreFormValues = (values) => {
   })
   const data = {
     ...values,
-    centreSchedule: cSchParsedValues,
+    centreSchedules: cSchParsedValues,
     careers: careerParsedValues
   }
   return data

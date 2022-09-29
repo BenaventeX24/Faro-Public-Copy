@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { useFormik } from "formik"
 import AddCarrer from "../components/AddCareer"
-import {freeOptions, schoolarLevelOptions, centreScheduleOptions} from "../utils/data"
+import {
+  freeOptions,
+  schoolarLevelOptions,
+  centreScheduleOptions,
+} from "../utils/data"
 import CustomSelect from "../components/CustomSelect"
 import { centreValidation } from "../utils/data"
-import { getCentresName, getCentreValues } from "../api/api"
+import { getCentresName, getCentreValues, requestCentre } from "../api/api"
 import { checkIfExists, parseCentreFormValues } from "../utils/functions"
 import SearchButton from "../components/searchButton"
 import CustomMultiSelect from "../components/CustomMultiSelect"
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
 
-
 const EditCentre = () => {
   const [centresNames, setCentresNames] = useState([])
-  const [centreValues, setCentreValues] = useState([]);
+  const [centreValues, setCentreValues] = useState([])
   const [careers, setCareers] = useState([])
-  const [showCareers, setShowCareers] = useState(false);
+  const [showCareers, setShowCareers] = useState(false)
 
   useEffect(() => {
     getCentresName().then((response) => {
@@ -23,22 +26,26 @@ const EditCentre = () => {
     })
   }, [])
 
+  useEffect(() => {
+    formik.setFieldValue("careers", careers)
+  }, [careers])
+  
   const formik = useFormik({
     initialValues: {
       centreName: "",
       address: "",
       free: null,
       centrePhone: "",
-      schoolarLevel: [],
-      centreSchedule: [],
+      schoolarLevel: "",
+      centreSchedules: [],
       careers: {},
-      pagelink: "",
     },
 
     validationSchema: centreValidation(),
 
     onSubmit: (values) => {
       const parsedValues = parseCentreFormValues(values)
+      console.log(parsedValues)
     },
   })
   const searchCentreName = async (searchValue) => {
@@ -50,7 +57,7 @@ const EditCentre = () => {
         if (item[0] === "careers") {
           setCareers(item[1])
         }
-        if (item[0] === "centreSchedule") {
+        if (item[0] === "centreSchedules") {
           formik.setFieldValue(item[0], [{ value: item[1], label: item[1] }])
         }
       })
@@ -58,9 +65,22 @@ const EditCentre = () => {
   }
   const getCareerData = (data) => {
     setCareers((item) => [...item, data])
-    formik.setFieldValue("careers", careers)
   }
 
+  const deleteCareer = (careerName) => {
+    setCareers(
+      careers.filter((career) => {
+        if (career.careerName === careerName) {
+          requestCentre(
+            `careers/career?idCareer=${career.idCareer}&idCentre=${centreValues.idCentre}`,
+            "DELETE"
+          )
+        }
+        return career.careerName !== careerName
+      })
+    )
+  }
+  
   return (
     <div className="w-85% h-full bg-firstBg">
       <div className="w-95% h-full ml-auto">
@@ -195,25 +215,25 @@ const EditCentre = () => {
             <div className="w-4/5 flex flex-col row-start-4">
               <label
                 className="text-base font-normal mb-2"
-                htmlFor="centreSchedule"
+                htmlFor="centreSchedules"
               >
                 Horarios
               </label>
               <CustomMultiSelect
                 defaultValue="no select"
-                name={"centreSchedule"}
+                name={"centreSchedules"}
                 isMulti
                 options={centreScheduleOptions}
-                value={formik.values.centreSchedule}
+                value={formik.values.centreSchedules}
                 onChange={(value) =>
-                  formik.setFieldValue("centreSchedule", value)
+                  formik.setFieldValue("centreSchedules", value)
                 }
                 placeholder={"Agregar los horarios del centro"}
               />
-              {formik.touched.centreSchedule && formik.errors.centreSchedule && (
+              {formik.touched.centreSchedules && formik.errors.centreSchedules && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.centreSchedule}
+                    {formik.errors.centreSchedules}
                   </p>
                 </div>
               )}
@@ -221,50 +241,38 @@ const EditCentre = () => {
             <div className="w-4/5 flex flex-col row-start-5">
               <h1 className="text-base font-normal">Carreras</h1>
               <div className="flex flex-col">
-                <div className="flex items-center w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white">
+                <div className="flex items-center w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white dropdown">
                   <p className="text-placeHolderColor text-base my-auto pl-4">
                     Añadir carrera
                   </p>
-                  {careers.length > 0 && 
-                    <ChevronDownIcon className="w-8 ml-auto" onClick={() => setShowCareers(!showCareers)}/>
-                  }
-                  <AddCarrer onSubmit={getCareerData} />
-                  {showCareers && (<div className="w-full bg-blackOpacity z-10 dropdown-content">
-                    {careers.map(({careerName}) => (
-                      <div key={careerName} className="flex">
-                        <p className="text-white">{careerName}</p>
-                        <MinusIcon onClick={() => setCareers(
-                           careers.filter((item) => item.careerName !== careerName)
-                        )} className="w-8 ml-auto"/>
-                      </div>)
-                      )
-                    }
-                  </div>)}
+                  <div className="flex items-center ml-auto">
+                    {careers.length > 0 && (
+                      <ChevronDownIcon
+                        className="w-8 ml-auto"
+                        onClick={() => setShowCareers(!showCareers)}
+                      />
+                    )}
+                    <AddCarrer onClick={getCareerData} />
+                  </div>
+                  {showCareers && (
+                    <div className="w-full bg-blackOpacity z-10 dropdown-content">
+                      {careers.map(({ careerName }) => (
+                        <div key={careerName} className="flex">
+                          <p className="text-white">{careerName}</p>
+                          <MinusIcon
+                            onClick={() => deleteCareer(careerName)}
+                            className="w-8 ml-auto"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               {formik.touched.careers && formik.errors.careers && (
                 <div className="relative">
                   <p className="errorMessage absolute">
                     {formik.errors.careers}
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="w-4/5 flex flex-col row-start-5">
-              <label className="text-base font-normal mb-2" htmlFor="pagelink">
-                Link a la página
-              </label>
-              <input
-                className="w-full h-11 pl-4 bg-secondBg rounded-md border-2 border-firstColor"
-                name="pagelink"
-                placeholder="Agregar página del centro"
-                onChange={formik.handleChange}
-                value={formik.values.pagelink}
-              />
-              {formik.touched.pagelink && formik.errors.pagelink && (
-                <div className="relative">
-                  <p className="errorMessage absolute">
-                    {formik.errors.pagelink}
                   </p>
                 </div>
               )}

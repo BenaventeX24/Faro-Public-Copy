@@ -37,7 +37,27 @@ Despues vamos a github y hacemos el pr de la branch que acabamos de crear a `dev
 
 `React` https://es.reactjs.org/docs/getting-started.html
 
+`Node.js` https://nodejs.org/en/ 
+
+`Typescript` https://www.typescriptlang.org/
+
+`Express` https://expressjs.com/es/
+
 ## Libraries
+
+`Body parser` https://apuntes.de/nodejs-desarrollo-web/body-parser/#gsc.tab=0
+
+`cors` https://expressjs.com/en/resources/middleware/cors.html
+
+`dotenv` https://github.com/motdotla/dotenv
+
+`jsonwebtoken` https://www.npmjs.com/package/jsonwebtoken
+
+`jwt-simple` https://www.npmjs.com/package/jwt-simple
+
+`mysql` https://www.npmjs.com/package/mysql
+
+`mysql2` https://www.npmjs.com/package/mysql2
 
 `Create React App` https://create-react-app.dev/docs/getting-started
 
@@ -48,3 +68,4 @@ Despues vamos a github y hacemos el pr de la branch que acabamos de crear a `dev
 `React-Modal` https://reactcommunity.org/react-modal/#general-usage example: https://www.npmjs.com/package/react-modal#api-documentation
 
 `React-Select` https://react-select.com/home
+
