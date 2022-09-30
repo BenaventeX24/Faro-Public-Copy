@@ -3,8 +3,10 @@ import * as Yup from 'yup';
 export const centreValidation = () => Yup.object().shape({
   centreName: Yup.string()
     .required('Porfavor ingrese el nombre del centro'),
-  address: Yup.string()
+  addressStreet: Yup.string()
     .required('Porfavor ingrese la dirección del centro'),
+  addressNumber: Yup.number()
+    .required('Porfavor ingrese el numero de puerta'),
   free: Yup.boolean().nullable()
     .required('Porfavor ingrese el tipo del centro'),
   centrePhone: Yup.string()
