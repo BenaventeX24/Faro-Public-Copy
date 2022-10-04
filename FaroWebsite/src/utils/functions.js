@@ -32,3 +32,8 @@ export const checkIfExists = (data, item) => {
       return false
    }
 }
+export const preventEnterSubmit  = (event) => {
+  if(event.key === 'Enter'){
+    event.preventDefault();
+  }
+}

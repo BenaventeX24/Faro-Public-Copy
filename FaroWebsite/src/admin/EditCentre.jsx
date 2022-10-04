@@ -33,7 +33,8 @@ const EditCentre = () => {
   const formik = useFormik({
     initialValues: {
       centreName: "",
-      address: "",
+      addressStreet: "",
+      addressNumber: "",
       free: null,
       centrePhone: "",
       schoolarLevel: "",
@@ -132,21 +133,38 @@ const EditCentre = () => {
               <label className="text-base font-normal mb-2" htmlFor="address">
                 Dirección
               </label>
-              <input
-                className="w-full h-11 pl-4 bg-secondBg rounded-md border-2 border-firstColor"
-                name="address"
-                placeholder="Agregar dirección del centro"
-                onChange={formik.handleChange}
-                value={formik.values.address}
-                type="text"
-              />
-              {formik.touched.address && formik.errors.address && (
-                <div className="relative">
-                  <p className="errorMessage absolute">
-                    {formik.errors.address}
-                  </p>
-                </div>
-              )}
+              <div className="w-full flex flex">
+                <input
+                  className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
+                  name="addressStreet"
+                  placeholder="Agregar dirección del centro"
+                  onChange={formik.handleChange}
+                  value={formik.values.addressStreet}
+                  type="text"
+                />
+                {formik.touched.addressStreet && formik.errors.addressStreet && (
+                  <div className="relative">
+                    <p className="errorMessage absolute">
+                      {formik.errors.addressStreet}
+                    </p>
+                  </div>
+                )}
+                <input
+                  className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
+                  name="addressNumber"
+                  placeholder="Puerta"
+                  onChange={formik.handleChange}
+                  value={formik.values.addressNumber}
+                  type="number"
+                />
+                {formik.touched.addressNumber && formik.errors.addressNumber && (
+                  <div className="relative">
+                    <p className="errorMessage absolute">
+                      {formik.errors.addressNumber}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="w-4/5 flex flex-col row-start-3">
               <label className="text-base font-normal mb-2" htmlFor="free">

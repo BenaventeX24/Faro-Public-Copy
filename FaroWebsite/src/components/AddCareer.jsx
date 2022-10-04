@@ -1,28 +1,29 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Modal from 'react-modal'
 import { Formik, Field, Form } from 'formik'
 import { ChevronDownIcon, MinusIcon, PlusIcon } from '@heroicons/react/outline'
 import { AddCareerValidation } from '../utils/data'
+import { preventEnterSubmit } from '../utils/functions'
 
 const AddCareer = ({onClick}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [repeatedKeyWord, setRepeatedKeyWord] = useState(false)
   const [keywords, setKeyWords] = useState([])
+  const [keyword, setKeyword] = useState("")
   const [showSelect, setShowSelect] = useState(false)
-  const inputRef = useRef(null)
 
   const addKeyword = () => {
-    const keyword = inputRef.current.value
-
-    setKeyWords(() => {
-      if (keywords.includes(keyword)) {
-        setRepeatedKeyWord(true)
-        return [...keywords]
-      }
-      setRepeatedKeyWord(false)
-      return [...keywords, keyword]
-    })
+    if (keyword !== "") {
+      setKeyWords(() => {
+        if (keywords.includes(keyword)) {
+          setRepeatedKeyWord(true)
+          return [...keywords]
+        }
+        setRepeatedKeyWord(false)
+        return [...keywords, keyword]
+      }) 
+    }
   }
 
   const handleSubmit = (formValues) => {
@@ -39,15 +40,25 @@ const AddCareer = ({onClick}) => {
     setModalIsOpen(false)
   }
 
+  const handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      addKeyword()
+      setKeyword("")
+      preventEnterSubmit(event)
+    }
+  }
+  
   return (
     <div className="flex items-center mr-8">
       <PlusIcon className="w-8 text-white cursor-pointer" onClick={openModal} />
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        contentLabel="Example Modal"
+        contentLabel="Career modal"
         className="modal"
         overlayClassName="modalOverlay"
+        shouldCloseOnOverlayClick={false}
+        shouldCloseOnEsc={false}
       >
         <div className="w-90% h-full flex flex-col mx-auto text-white">
           <Formik
@@ -138,10 +149,12 @@ const AddCareer = ({onClick}) => {
                   </label>
                   <div className="dropdown flex w-full h-11 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between">
                     <Field
-                      innerRef={inputRef}
+                      value={keyword}
+                      onChange={(e) => setKeyword(e.target.value) }
                       className="w-full h-full pl-4 bg-secondBg"
                       name="keyword"
                       placeholder="Agregar palabra clave"
+                      onKeyPress={handleKeyPress}
                     />
                     {keywords.length > 0 && (
                       <ChevronDownIcon
@@ -178,7 +191,9 @@ const AddCareer = ({onClick}) => {
                     )}
                   </div>
                   {repeatedKeyWord && (
-                    <p className="errorMessage">Palabra repetida</p>
+                     <div className="relative">
+                      <p className="errorMessage absolute">Palabra repetida</p>
+                    </div>
                   )}
                   {keywords.length > 0 && repeatedKeyWord === false ? (
                     <div className="relative text-gray-400">
