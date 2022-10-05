@@ -1,9 +1,13 @@
 import express from "express";
 const app = express();
-import { requireJwtMiddleware } from "./controllers/AdminController";
-import login from "./controllers/AdminController";
-import centres from "./controllers/CentreController";
-import careers from "./controllers/CareerController";
+
+import { requireJwtMiddleware } from "./controllers/admin/AdminController";
+import login from "./controllers/admin/AdminController";
+
+import centresAdmin from "./controllers/admin/CentreController";
+import careersAdmin from "./controllers/admin/CareerController";
+import centresPublic from "./controllers/public/CentrePublicController";
+import careersPublic from "./controllers/public/CareerPublicController";
 
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -22,13 +26,16 @@ app.use(express.urlencoded({ extended: false }));
 /*No Middleware configured*/
 app.use("/login", login);
 
+app.use("/centres", centresPublic);
+app.use("/careers", careersPublic);
+
 /*Middleware that'll control JWT, this app uses refresh token. More details in AdminController class*/
 /*Middleware is active from now on*/
 app.use(requireJwtMiddleware);
 
 /*Listen routes*/
-app.use("/centres", centres);
-app.use("/careers", careers);
+app.use("/centres", centresAdmin);
+app.use("/careers", careersAdmin);
 
 /*Run app*/
 app.listen(process.env.PORT, () => {
