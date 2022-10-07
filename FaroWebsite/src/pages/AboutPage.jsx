@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom'
 import Farologo from "../assets/images/Farologo.png";
-import Objetivo from "../assets/images/Objetivo.svg"
-import masInfo from "../assets/images/masInfo.svg";
+import Object from "../assets/images/Object.svg"
+import moreInformation from "../assets/images/moreInformation.svg";
 
 export default function AboutPage() {
   return (
@@ -37,7 +37,7 @@ export default function AboutPage() {
             </div>
             <div className='w-64'>
               <div className='flex dsiplay-flex'>
-                <img src={Objetivo} alt="m" className='w-16 h-16'/>
+                <img src={Object} alt="m" className='w-16 h-16'/>
                 <h3 className='text-2xl'>
                   Nuestro objetivo
                 </h3>
@@ -50,7 +50,7 @@ export default function AboutPage() {
             </div>
             <div className='w-64'>
               <div className='flex display-flex'>
-                <img src={masInfo} alt='r' className='w-11 h-16'/>
+                <img src={moreInformation} alt='r' className='w-11 h-16'/>
                 <h3 className='text-2xl'>
                   Más información
                 </h3>
