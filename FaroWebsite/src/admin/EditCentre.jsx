@@ -134,36 +134,40 @@ const EditCentre = () => {
                 Dirección
               </label>
               <div className="w-full flex flex">
-                <input
-                  className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
-                  name="addressStreet"
-                  placeholder="Agregar dirección del centro"
-                  onChange={formik.handleChange}
-                  value={formik.values.addressStreet}
-                  type="text"
-                />
-                {formik.touched.addressStreet && formik.errors.addressStreet && (
-                  <div className="relative">
-                    <p className="errorMessage absolute">
-                      {formik.errors.addressStreet}
-                    </p>
+              <div className="w-4/5 flex flex-col">
+                    <input
+                      className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
+                      name="addressStreet"
+                      placeholder="Agregar dirección del centro"
+                      onChange={formik.handleChange}
+                      value={formik.values.addressStreet}
+                      type="text"
+                    />
+                    {formik.touched.addressStreet && formik.errors.addressStreet && (
+                      <div className="relative">
+                        <p className="errorMessage absolute">
+                          {formik.errors.addressStreet}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
-                <input
-                  className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
-                  name="addressNumber"
-                  placeholder="Puerta"
-                  onChange={formik.handleChange}
-                  value={formik.values.addressNumber}
-                  type="number"
-                />
-                {formik.touched.addressNumber && formik.errors.addressNumber && (
-                  <div className="relative">
-                    <p className="errorMessage absolute">
-                      {formik.errors.addressNumber}
-                    </p>
+                  <div className="w-auto flex flex-col">
+                    <input
+                      className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
+                      name="addressNumber"
+                      placeholder="Puerta"
+                      onChange={formik.handleChange}
+                      value={formik.values.addressNumber}
+                      type="number"
+                    />
+                    {formik.touched.addressNumber && formik.errors.addressNumber && (
+                      <div>
+                        <p className="errorMessage absolute">
+                          {formik.errors.addressNumber}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                )}
               </div>
             </div>
             <div className="w-4/5 flex flex-col row-start-3">

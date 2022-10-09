@@ -42,8 +42,8 @@ const AdminLogIn = () => {
     return <MobileErrorView />
   } else {
     return (
-      <div className="flex">
-        <div className="w-1/2 h-screen flex justify-center items-center bg-secondBg">
+      <div className="flex h-screen min-h-md overflow-y-scroll">
+        <div className="w-1/2 h-full flex justify-center items-center bg-secondBg">
           <div className="flex items-end">
             <img className="w-24 mr-4" src={farologo} alt="Faro logo" />
             <h1 className="tracking-widest text-white text-5xl font-extrabold">
@@ -51,7 +51,7 @@ const AdminLogIn = () => {
             </h1>
           </div>
         </div>
-        <div className="w-1/2 h-screen bg-firstBg flex flex-col items-center">
+        <div className="w-1/2 h-full bg-firstBg flex flex-col items-center">
           <h1 className="tracking-widest text-white text-5xl font-regular mt-16">
             Iniciar Sesión
           </h1>
@@ -75,7 +75,7 @@ const AdminLogIn = () => {
                 <p className="errorMessage">Usuario o contraseña incorrectos</p>
               )}
             </div>
-            <div className="flex justify-center mt-48">
+            <div className="flex justify-center mt-48 smMinH:mt-24">
               <input
                 className="text-white cursor-pointer normal-button"
                 onClick={handleSubmitLogIn}

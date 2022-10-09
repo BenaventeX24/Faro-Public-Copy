@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  width: 0;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
 :root {
   --primary-color: #0ea5e9;
   --error-color: #d83a52;
@@ -152,6 +162,9 @@ input[type='number'] {
 }
 .react-select__value-container {
   padding-left: 1rem !important;
+}
+.react-select__input-container {
+  color: #fff !important;
 }
 
 .react-select__placeholder {
