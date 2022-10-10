@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+<<<<<<< HEAD
 import axios from "axios"
 
 import { constants } from "../config/constants"
@@ -11,17 +12,37 @@ const METHODS = {
   post: "post",
   put: "put",
 }
+=======
+import axios from 'axios';
+
+import { constants } from '../config/constants';
+import { ApiError } from './api-error';
+
+const METHODS = {
+  delete: 'delete',
+  get: 'get',
+  patch: 'patch',
+  post: 'post',
+  put: 'put',
+};
+>>>>>>> develop
 
 class ApiServiceClass {
   constructor() {
     this.axios = axios.create({
       baseURL: constants.apiBaseURL,
+<<<<<<< HEAD
     })
     this._addedHeaders = {}
+=======
+    });
+    this._addedHeaders = {};
+>>>>>>> develop
   }
 
   async _sendRequest(method, url, config = {}) {
     try {
+<<<<<<< HEAD
       const updatedConfig = { ...config }
       updatedConfig.headers = {
         ...this._addedHeaders,
@@ -33,22 +54,41 @@ class ApiServiceClass {
       const body = updatedConfig.body || {}
       delete updatedConfig.body
       return await this.axios[method](url, body, updatedConfig)
+=======
+      const updatedConfig = { ...config };
+      updatedConfig.headers = { ...this._addedHeaders, ...(config.headers || {}) };
+      if (method === METHODS.get || method === METHODS.delete) {
+        return await this.axios[method](url, updatedConfig);
+      }
+      const body = updatedConfig.body || {};
+      delete updatedConfig.body;
+      return await this.axios[method](url, body, updatedConfig);
+>>>>>>> develop
     } catch (error) {
       if (error.response && error.response.data) {
         throw new ApiError({
           message: error.response.data.message, // Si el backend envia un atributo message
           status: error.response.status,
+<<<<<<< HEAD
         })
+=======
+        });
+>>>>>>> develop
       }
       throw new ApiError({
         status: null,
         code: null,
         message: error.message,
+<<<<<<< HEAD
       })
+=======
+      });
+>>>>>>> develop
     }
   }
 
   setHeaders(newHeaders) {
+<<<<<<< HEAD
     Object.assign(this._addedHeaders, newHeaders)
   }
 
@@ -76,3 +116,32 @@ class ApiServiceClass {
 const ApiService = new ApiServiceClass()
 
 export { ApiService }
+=======
+    Object.assign(this._addedHeaders, newHeaders);
+  }
+
+  get(url, params = {}, config = {}) {
+    return this._sendRequest(METHODS.get, url, { ...config, params });
+  }
+
+  post(url, body = {}, config = {}) {
+    return this._sendRequest(METHODS.post, url, { ...config, body });
+  }
+
+  patch(url, body = {}, config = {}) {
+    return this._sendRequest(METHODS.patch, url, { ...config, body });
+  }
+
+  put(url, body = {}, config = {}) {
+    return this._sendRequest(METHODS.put, url, { ...config, body });
+  }
+
+  delete(url, params = {}, config = {}) {
+    return this._sendRequest(METHODS.delete, url, { ...config, params });
+  }
+}
+
+const ApiService = new ApiServiceClass();
+
+export { ApiService };
+>>>>>>> develop
