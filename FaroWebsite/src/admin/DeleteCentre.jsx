@@ -65,7 +65,7 @@ const DeleteCentre = () => {
             searchValue={handleSearch}
           ></SearchButton>
         </div>
-        <div className="w-full h-1/5 flex flex-col items-end">
+        <div className="w-full h-1/5 flex flex-col items-end smMinH:h-0">
           {missingCentre && (
             <p className="errorMessage mr-52">
               Ingrese un centro para eliminar

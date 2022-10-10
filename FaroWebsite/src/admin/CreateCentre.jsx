@@ -78,7 +78,7 @@ const CreateCentre = () => {
               )}
             </div>
             <div className="w-4/5 flex">
-              <div className="w-4/5 flex flex-col">
+              <div className="w-full flex flex-col">
                 <label className="text-base font-normal mb-2" htmlFor="address">
                   Direccion
                 </label>

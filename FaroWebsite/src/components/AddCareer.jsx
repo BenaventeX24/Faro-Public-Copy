@@ -55,7 +55,7 @@ const AddCareer = ({ onClick }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Career modal"
-        className="modal"
+        className="modal min-h-sm"
         overlayClassName="modalOverlay"
         shouldCloseOnOverlayClick={false}
         shouldCloseOnEsc={false}
