@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react"
-import { userValidation } from "../api/api"
 import farologo from "../assets/images/Farologo.png"
 import { isMobile } from "../utils/functions"
 import MobileErrorView from "../utils/mobileErrorView"
 import { useNavigate } from "react-router-dom"
+import AdminController from "../networking/controllers/Admin-Controller"
 
 const AdminLogIn = () => {
   const [validationState, setValidationState] = useState()
 
   let navigate = useNavigate()
 
-  const handleLogIn = ({ user, password }) => {
-    userValidation( user, password ).then((response) => {
-      if (response.LOGIN_FAILED) {
-        setValidationState(false)
-      }else{
-       setValidationState(true)
-       localStorage.setItem("token", response)
-      }
-    })
+  const handleLogIn = async ({ user, password }) => {
+    const validation = await AdminController.handleLogin(user, password)
+    if (validation.LOGIN_FAILED) {
+      setValidationState(false)
+    } else {
+      setValidationState(true)
+      localStorage.setItem("token", validation)
+    }
   }
   useEffect(() => {
     if (validationState) {

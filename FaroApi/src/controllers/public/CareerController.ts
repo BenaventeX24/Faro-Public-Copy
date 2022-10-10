@@ -1,8 +1,8 @@
 import express from "express";
 const careers = express.Router();
 import dotenv from "dotenv";
-import { CareerDAO } from "../dao/CareerDAO";
-const careerDB = new CareerDAO();
+import { CareerPublicDAO } from "../../dao/public/CareerPublicDAO";
+const careerDB = new CareerPublicDAO();
 dotenv.config();
 
 careers.get("/", (req, res) => {
@@ -52,25 +52,6 @@ careers.get("/career", (req, res) => {
     );
   } else {
     res.status(400).send("Must send either an id, a name or a centre");
-  }
-});
-
-careers.delete("/career", (req, res) => {
-  const query = require("url").parse(req.url, true).query;
-
-  if (!query.idCareer || !query.idCentre) {
-    res.status(400).send("Must send both id of career and id of centre");
-  } else {
-    careerDB.deleteCareer(query.idCareer, query.idCentre).then(
-      (response) => {
-        res
-          .status(200)
-          .send("Career was succesfully desvinculated from centre");
-      },
-      (reason) => {
-        res.status(404).send("Career could not be desvinculated: " + reason);
-      }
-    );
   }
 });
 

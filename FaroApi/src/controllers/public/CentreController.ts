@@ -1,40 +1,12 @@
 import express from "express";
-const centres = express.Router();
+const centrePublic = express.Router();
 import dotenv from "dotenv";
-import { CentreDAO } from "../dao/CentreDAO";
-const centreDB = new CentreDAO();
-import { Centre } from "../model/Centre";
+import { CentrePublicDAO } from "../../dao/public/CentrePublicDAO";
+const centreDB = new CentrePublicDAO();
 
 dotenv.config();
 
-centres.post("/", (req, res) => {
-  const centre: Centre = Object.assign(new Centre(), req.body);
-
-  centreDB.createCentre(centre).then(
-    () => {
-      res.status(200).send("Centre succesfully created");
-    },
-    (reason) => {
-      res.status(404).send("Centre could not be created : " + reason);
-    }
-  );
-});
-
-centres.patch("/centre", (req, res) => {
-  const query = require("url").parse(req.url, true).query;
-
-  const centre: Centre = Object.assign(new Centre(), req.body);
-  centreDB.updateCentre(query.id, centre).then(
-    () => {
-      res.status(200).send("Centre succesfully edited");
-    },
-    (reason) => {
-      res.status(404).send("Centre could not be edited : " + reason);
-    }
-  );
-});
-
-centres.get("/", (req, res) => {
+centrePublic.get("/", (req, res) => {
   centreDB.getAllCentres().then(
     (centre) => {
       res.status(200).json(centre);
@@ -45,7 +17,7 @@ centres.get("/", (req, res) => {
   );
 });
 
-centres.get("/centresName", (req, res) => {
+centrePublic.get("/centresName", (req, res) => {
   centreDB.getAllCentresName().then(
     (centre) => {
       res.status(200).json(centre);
@@ -56,8 +28,18 @@ centres.get("/centresName", (req, res) => {
   );
 });
 
-centres.get("/centre", (req, res) => {
+centrePublic.get("/centresCoordinates", (req, res) => {
+  centreDB.getAllCentresCoordinates().then(
+    (coordinates) => {
+      res.status(200).json(coordinates);
+    },
+    (reason) => {
+      res.status(404).send("Centres could no be returned: " + reason);
+    }
+  );
+});
 
+centrePublic.get("/centre", (req, res) => {
   const query = require("url").parse(req.url, true).query;
   const byId = query.id ? true : false;
   const byName = query.name ? true : false;
@@ -73,7 +55,6 @@ centres.get("/centre", (req, res) => {
       }
     );
   } else if (byId && !byName && !byCareer) {
-    console.log("AIGHT");
     centreDB.getCentre(query.id).then(
       (centre) => {
         res.status(200).json(centre);
@@ -96,17 +77,4 @@ centres.get("/centre", (req, res) => {
   }
 });
 
-centres.delete("/:id", (req, res) => {
-  const query = require("url").parse(req.url, true).query;
-
-  centreDB.deleteCentre(query.id).then(
-    () => {
-      res.status(200).send("Centre was succesfully deleted");
-    },
-    (reason) => {
-      res.status(404).send("Centre could not be deleted: " + reason);
-    }
-  );
-});
-
-export default centres;
+export default centrePublic;

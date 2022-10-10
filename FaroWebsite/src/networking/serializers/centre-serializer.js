@@ -11,8 +11,10 @@ export class CentreSerializer {
       schoolarLevel: data.schoolarLevel,
       addressStreet: data.addressStreet,
       phoneNumber: data.phoneNumber,
-      careers: data.careers.map((car) => this.deSerializeCareer(car)),
-    };
+      careers: data.careers
+        ? data.careers.map((car) => this.deSerializeCareer(car))
+        : [],
+    }
   }
 
   static deSerializeCareer(data) {
@@ -23,7 +25,7 @@ export class CentreSerializer {
       degree: data.degree,
       duration: data.duration,
       keywords: data.keywords,
-    };
+    }
   }
 
   static deSerializeCentreCoordinates(data) {
@@ -32,6 +34,13 @@ export class CentreSerializer {
       centreName: data.centreName,
       latitude: data.latitude,
       longitude: data.longitude,
-    };
+    }
+  }
+
+  static deSerializeCentresName(data) {
+    return {
+      idCentre: data.idCentre,
+      centreName: data.centreName,
+    }
   }
 }

@@ -11,7 +11,7 @@ import {
   ExpirationStatus,
   Session,
   SessionUsername,
-} from "../model/Admin";
+} from "../../model/Admin";
 
 const LOGIN_FAILED = "Credentials are incorrect";
 
@@ -94,7 +94,7 @@ export function checkExpiration(token: Session): ExpirationStatus {
   if (token.expires > now) return "active";
 
   // Find the timestamp for the end of the token's grace period
-  const threeHoursInMs = 3 * 60 * 60 * 1000;
+  const threeHoursInMs = 3 * 15 * 60 * 1000;
   const threeHoursAfterExpiration = token.expires + threeHoursInMs;
 
   if (threeHoursAfterExpiration > now) {
@@ -112,9 +112,9 @@ export function requireJwtMiddleware(
 ) {
   /*Unauthorized message*/
   const unauthorized = (message: string) =>
-    res.status(401).json({
+    res.status(404).json({
       ok: false,
-      status: 401,
+      status: 404,
       message,
     });
 
@@ -183,6 +183,8 @@ export function requireJwtMiddleware(
 
 /*Login method, pretty simple*/
 login.post("/", (req, res) => {
+  console.log(req.body);
+  
   let session: SessionUsername;
   if (
     /*If credentials are correct. */
