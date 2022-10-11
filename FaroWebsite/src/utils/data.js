@@ -8,8 +8,8 @@ export const centreValidation = () => Yup.object().shape({
   addressNumber: Yup.number()
     .required('Ingrese el numero de puerta'),
   free: Yup.boolean().nullable()
-    .required('Ingrese el tipo del centro'),
-  centrePhone: Yup.string()
+    .required('Porfavor ingrese el tipo del centro'),
+  phoneNumber: Yup.string()
     .min(8, 'Ingrese un numero correcto'),
   schoolarLevel: Yup.string()
     .required('Ingrese los grados del centro'),
@@ -23,13 +23,13 @@ export const centreValidation = () => Yup.object().shape({
 
 export const AddCareerValidation = () => Yup.object().shape({
   careerName: Yup.string()
-    .required('Ingrese el nombre de la carrera'),
-  careerTitle: Yup.string()
-    .required('Ingrese el título de la carrera'),
+    .required('Porfavor ingrese el nombre de la carrera'),
+  degree: Yup.string()
+    .required('Porfavor ingrese el título de la carrera'),
   careerDescription: Yup.string()
-    .required('Ingrese la descripción de la carrera'),
-  careerDuration: Yup.string()
-    .required('Ingrese la duracion de la carrera'),
+    .required('Porfavor ingrese la descripción de la carrera'),
+  duration: Yup.string()
+    .required('Porfavor ingrese la duracion de la carrera'),
 })
 
 export const schoolarLevelOptions = [

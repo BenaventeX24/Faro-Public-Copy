@@ -1,8 +1,9 @@
+import {getCoordinatesFromAddress} from '../api/geocode'
 export const isMobile = () => {
   return window.innerWidth <= 960 ? true : false
 }
 
-export const parseCentreFormValues = (values) => {
+export const parseCentreFormValues = async (values) => {
   const cSchParsedValues = []
   const careerParsedValues = []
   Object.entries(values).forEach(([key ,value]) => {
@@ -17,10 +18,14 @@ export const parseCentreFormValues = (values) => {
       })
     }
   })
+  const address = values.addressStreet + " "+values.addressNumber
+  const {lat, lng} = await getCoordinatesFromAddress(address)
   const data = {
     ...values,
     centreSchedules: cSchParsedValues,
-    careers: careerParsedValues
+    careers: careerParsedValues,
+    latitude: lat,
+    longitude: lng
   }
   return data
 }

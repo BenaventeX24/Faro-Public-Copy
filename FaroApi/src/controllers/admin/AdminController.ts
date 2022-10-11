@@ -183,6 +183,8 @@ export function requireJwtMiddleware(
 
 /*Login method, pretty simple*/
 login.post("/", (req, res) => {
+  console.log(req.body);
+  
   let session: SessionUsername;
   if (
     /*If credentials are correct. */

@@ -5,7 +5,7 @@ import {
   CentreScheduleDB,
   schoolarLevelDB,
 } from "../../model/Centre";
-import { db } from "../../databaseCon/Database";
+import { dbAdmin } from "../../databaseCon/Database";
 import { Career } from "../../model/Career";
 import { CareerDAO } from "./CareerDAO";
 import { resolve } from "path";
@@ -28,7 +28,7 @@ export class CentreDAO {
     return new Promise((resolve, reject) => {
       /*Database requests are handled with Promises*/
       /*mysql2 driver requires classes that extend RowDataPacket*/
-      db.query<CentreDB[]>(
+      dbAdmin.query<CentreDB[]>(
         /*Raw mysql query*/
         "select idCentre, centreName, free, addressStreet, addressNumber, latitude, longitude, phoneNumber, schoolarLevel, group_concat(centreSchedule) as centreSchedules from centre natural left join centre_schedules natural left join schoolarlevel natural left join SCHEDULES where idCentre=?",
         /*Every sent paramether will match every '?' mark*/
@@ -74,7 +74,7 @@ export class CentreDAO {
 
   getAllCentres(): Promise<Centre[]> {
     return new Promise((resolve, reject) => {
-      db.query<CentreDB[]>("SELECT * FROM CENTRE", async (err, res) => {
+      dbAdmin.query<CentreDB[]>("SELECT * FROM CENTRE", async (err, res) => {
         if (err) reject(err);
         else {
           /*In order to create an array of type centre we must first get all centres.
@@ -91,7 +91,7 @@ export class CentreDAO {
   getAllCentresName(): Promise<Centre[]> {
     const centres: Centre[] = [];
     return new Promise((resolve, reject) => {
-      db.query<CentreDB[]>(
+      dbAdmin.query<CentreDB[]>(
         "SELECT idCentre, centreName FROM CENTRE",
         (err, res) => {
           if (err) reject(err);
@@ -108,7 +108,7 @@ export class CentreDAO {
 
   getCentreByName(centreName: string): Promise<Centre | undefined> {
     return new Promise((resolve, reject) => {
-      db.query<CentreDB[]>(
+      dbAdmin.query<CentreDB[]>(
         "select * from CENTRE natural join CAREER where centreName = ?",
         [centreName],
         (err, res) => {
@@ -132,7 +132,7 @@ export class CentreDAO {
   /*Get centres that are related to a specific career*/
   getCentresByCareer(idCareer: number): Promise<Centre | undefined> {
     return new Promise((resolve, reject) => {
-      db.query<CentreDB[]>(
+      dbAdmin.query<CentreDB[]>(
         "select idCentre from CAREER natural join CENTRE_CAREER where idCareer = ?",
         [idCareer],
         (err, res) => {
@@ -153,7 +153,7 @@ export class CentreDAO {
 
   vinculateCentreSchoolarLevel(idCentre: number, scholarLevel: string) {
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "call DBFiller_Centre_VinculateSchoolarLevel(?,?)",
         [idCentre, scholarLevel],
         (err, res) => {
@@ -170,7 +170,7 @@ export class CentreDAO {
     });
 
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "insert into CENTRE (centreName, free, addressStreet, addressNumber, latitude, longitude, phoneNumber) values(?,?,?,?,?,?,?)",
         [
           centre.getCentreName(),
@@ -218,7 +218,7 @@ export class CentreDAO {
 
   deleteSchedules(idCentre: number) {
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "delete FROM CENTRE_SCHEDULES where idCentre=?",
         [idCentre],
         (err, res) => {
@@ -234,7 +234,7 @@ export class CentreDAO {
   vinculateCentreSchedules(idCentre: number, schedule: string[]) {
     return new Promise((resolve, reject) => {
       schedule.forEach((sch) => {
-        db.query<OkPacket>(
+        dbAdmin.query<OkPacket>(
           "call DBFiller_Centre_VinculateSchedules(?,?)",
           [idCentre, sch],
           (err, res) => {
@@ -262,7 +262,7 @@ export class CentreDAO {
     });
 
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "UPDATE CENTRE set centreName=?, free=?, addressStreet=?, addressNumber=?, latitude=?, longitude=?, phoneNumber=? where idCentre = ?",
         [
           centre.getCentreName(),
@@ -296,7 +296,7 @@ export class CentreDAO {
 
   deleteCentre(idCentre: number): Promise<number> {
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "call DBFiller_Centre_Delete(?)",
         [idCentre],
         async (err, res) => {

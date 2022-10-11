@@ -1,5 +1,5 @@
 import { OkPacket } from "mysql2";
-import { db } from "../../databaseCon/Database";
+import { dbAdmin } from "../../databaseCon/Database";
 import { Career, CareerDB } from "../../model/Career";
 import { selectCount } from "../../model/Generics";
 import { KeywordDAO } from "./KeywordDAO";
@@ -19,7 +19,7 @@ export class CareerDAO {
     return new Promise((/*callbacks*/ resolve, reject) => {
       /*Database requests are handled with Promises*/
       /*mysql2 driver requires classes that extend RowDataPacket*/
-      db.query<CareerDB[]>(
+      dbAdmin.query<CareerDB[]>(
         /*Raw mysql query*/
         "SELECT * FROM CAREER WHERE idCareer = ?",
         /*Every sent paramether will match every '?' mark*/
@@ -60,7 +60,7 @@ export class CareerDAO {
 
   getAllCareers(): Promise<Career[]> {
     return new Promise((resolve, reject) => {
-      db.query<CareerDB[]>("select * from CAREER", async (err, res) => {
+      dbAdmin.query<CareerDB[]>("select * from CAREER", async (err, res) => {
         if (err) reject(err);
         else {
           /*In order to create an array of type careers we must first get all careers
@@ -76,7 +76,7 @@ export class CareerDAO {
 
   getCareerByName(careerName: string): Promise<Career> {
     return new Promise((resolve, reject) => {
-      db.query<CareerDB[]>(
+      dbAdmin.query<CareerDB[]>(
         "SELECT * FROM CAREER WHERE careerName = ?",
         [careerName],
         (err, res) => {
@@ -100,7 +100,7 @@ export class CareerDAO {
   /*Get all careers that are related to a specific centreId*/
   getCareersByCentre(centreId: number): Promise<Career[]> {
     return new Promise((resolve, reject) => {
-      db.query<CareerDB[]>(
+      dbAdmin.query<CareerDB[]>(
         "select idCareer from CENTRE_CAREER where idCentre = ?",
         [centreId],
         async (err, res) => {
@@ -119,7 +119,7 @@ export class CareerDAO {
 
   vinculateCentreCareer(idCentre: number, idCareer: number) {
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "insert into CENTRE_CAREER (idCentre, idCareer) values(?,?)",
         [idCentre, idCareer],
         (err, res) => {
@@ -138,7 +138,7 @@ export class CareerDAO {
     return new Promise(async (resolve, reject) => {
       const careers = await this.getAllCareers();
       careers.forEach((career) => {
-        db.query<selectCount[]>(
+        dbAdmin.query<selectCount[]>(
           "select count(idCareer) as countResult from CENTRE_CAREER where idCareer=?",
           [career.getIdCareer()],
           async (err, res) => {
@@ -158,7 +158,7 @@ export class CareerDAO {
   createCareer(careers: Career[], centreId: number): Promise<OkPacket> {
     return new Promise((resolve, reject) => {
       careers.forEach((career) => {
-        db.query<OkPacket>(
+        dbAdmin.query<OkPacket>(
           "insert into CAREER (careerName, careerDescription, degree, duration) values(?,?,?,?)",
           [
             career.getCareerName(),
@@ -181,7 +181,7 @@ export class CareerDAO {
                 reject(err);
               }
             } else {
-              /*No errors from db*/
+              /*No errors from dbAdmin*/
               /*save keywords in variable*/
               const careerKeywords = career.getKeywords();
               if (careerKeywords !== undefined) {
@@ -202,7 +202,7 @@ export class CareerDAO {
 
   deleteCareer(idCareer: number, idCentre: number): Promise<number> {
     return new Promise((resolve, reject) => {
-      db.query<OkPacket>(
+      dbAdmin.query<OkPacket>(
         "call DBFiller_Career_DesvinculateCentre(?,?)",
         [idCareer, idCentre],
         (err, res) => {

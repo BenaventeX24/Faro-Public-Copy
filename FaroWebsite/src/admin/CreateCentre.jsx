@@ -9,19 +9,17 @@ import {
 import CustomSelect from "../components/CustomSelect"
 import CustomMultiSelect from "../components/CustomMultiSelect"
 import { centreValidation } from "../utils/data"
-import { requestCentre, sendCreatedCentre } from "../api/api"
 import { parseCentreFormValues } from "../utils/functions"
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
+import CentreController from "../networking/controllers/Centre-Controller"
 
 const CreateCentre = () => {
   const [careers, setCareers] = useState([])
   const [showCareers, setShowCareers] = useState(false)
 
-
   useEffect(() => {
     formik.setFieldValue("careers", careers)
   }, [careers])
-  
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +27,7 @@ const CreateCentre = () => {
       addressStreet: "",
       addressNumber: "",
       free: null,
-      centrePhone: "",
+      phoneNumber: "",
       schoolarLevel: "",
       centreSchedules: [],
       careers: {},
@@ -37,10 +35,10 @@ const CreateCentre = () => {
 
     validationSchema: centreValidation(),
 
-    onSubmit: (values) => {
-      const parsedValues = parseCentreFormValues(values)
+    onSubmit: async (values) => {
+      const parsedValues = await parseCentreFormValues(values)
       console.log(parsedValues)
-      // sendCreatedCentre(parsedValues).then((response) => console.log(response))
+      CentreController.createCentre(parsedValues)
     },
   })
 
@@ -85,41 +83,37 @@ const CreateCentre = () => {
                   Direccion
                 </label>
                 <div className="w-full flex flex">
-                  <div className="w-4/5 flex flex-col">
-                    <input
-                      className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
-                      name="addressStreet"
-                      placeholder="Agregar dirección del centro"
-                      onChange={formik.handleChange}
-                      value={formik.values.addressStreet}
-                      type="text"
-                    />
-                    {formik.touched.addressStreet && formik.errors.addressStreet && (
-                      <div className="relative">
-                        <p className="errorMessage absolute">
-                          {formik.errors.addressStreet}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="w-auto flex flex-col">
-                    <input
-                      className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
-                      name="addressNumber"
-                      placeholder="Puerta"
-                      onChange={formik.handleChange}
-                      value={formik.values.addressNumber}
-                      type="number"
-                    />
-                    {formik.touched.addressNumber && formik.errors.addressNumber && (
-                      <div>
-                        <p className="errorMessage absolute">
-                          {formik.errors.addressNumber}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-              </div>
+                  <input
+                    className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
+                    name="addressStreet"
+                    placeholder="Agregar dirección del centro"
+                    onChange={formik.handleChange}
+                    value={formik.values.addressStreet}
+                    type="text"
+                  />
+                  {formik.touched.addressStreet && formik.errors.addressStreet && (
+                    <div className="relative">
+                      <p className="errorMessage absolute">
+                        {formik.errors.addressStreet}
+                      </p>
+                    </div>
+                  )}
+                  <input
+                    className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
+                    name="addressNumber"
+                    placeholder="Puerta"
+                    onChange={formik.handleChange}
+                    value={formik.values.addressNumber}
+                    type="number"
+                  />
+                  {formik.touched.addressNumber && formik.errors.addressNumber && (
+                    <div className="relative">
+                      <p className="errorMessage absolute">
+                        {formik.errors.addressNumber}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="w-4/5 flex flex-col">
@@ -142,22 +136,22 @@ const CreateCentre = () => {
             <div className="w-4/5 flex flex-col">
               <label
                 className="text-base font-normal mb-2"
-                htmlFor="centrePhone"
+                htmlFor="phoneNumber"
               >
                 Teléfono
               </label>
               <input
                 className="w-full h-11 pl-4 bg-secondBg rounded-md border-2 border-firstColor"
-                name="centrePhone"
+                name="phoneNumber"
                 placeholder="Agregar teléfono del centro"
                 onChange={formik.handleChange}
-                value={formik.values.centrePhone}
+                value={formik.values.phoneNumber}
                 type="number"
               />
-              {formik.touched.centrePhone && formik.errors.centrePhone && (
+              {formik.touched.phoneNumber && formik.errors.phoneNumber && (
                 <div className="relative">
                   <p className="errorMessage absolute">
-                    {formik.errors.centrePhone}
+                    {formik.errors.phoneNumber}
                   </p>
                 </div>
               )}
@@ -219,27 +213,33 @@ const CreateCentre = () => {
                   Añadir carrera
                 </p>
                 <div className="flex items-center ml-auto">
-                    {careers.length > 0 && (
-                      <ChevronDownIcon
-                        className="w-8 ml-auto"
-                        onClick={() => setShowCareers(!showCareers)}
-                      />
-                    )}
-                    <AddCarrer onClick={getCareerData} />
-                  </div>
-                  {showCareers && (
-                    <div className="w-full bg-blackOpacity z-10 dropdown-content">
-                      {careers.map(({ careerName }) => (
-                        <div key={careerName} className="flex">
-                          <p className="text-white">{careerName}</p>
-                          <MinusIcon
-                            onClick={() => setCareers(careers.filter((career) => career.careerName !== careerName))}
-                            className="w-8 ml-auto"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  {careers.length > 0 && (
+                    <ChevronDownIcon
+                      className="w-8 ml-auto"
+                      onClick={() => setShowCareers(!showCareers)}
+                    />
                   )}
+                  <AddCarrer onClick={getCareerData} />
+                </div>
+                {showCareers && (
+                  <div className="w-full bg-blackOpacity z-10 dropdown-content">
+                    {careers.map(({ careerName }) => (
+                      <div key={careerName} className="flex">
+                        <p className="text-white">{careerName}</p>
+                        <MinusIcon
+                          onClick={() =>
+                            setCareers(
+                              careers.filter(
+                                (career) => career.careerName !== careerName
+                              )
+                            )
+                          }
+                          className="w-8 ml-auto"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               {formik.touched.careers && formik.errors.careers && (
                 <div className="relative">

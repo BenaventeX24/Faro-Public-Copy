@@ -110,7 +110,8 @@ export class CareerPublicDAO {
               await Promise.all(
                 res.map((career) => this.getCareerById(career.idCareer))
               ).then((careers) => resolve(careers));
-            } else reject(Error("No_careers"));
+            }
+            resolve([]); //else reject(Error("No_careers"));
           }
         }
       );

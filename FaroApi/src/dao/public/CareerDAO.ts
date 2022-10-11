@@ -1,5 +1,5 @@
 import { OkPacket } from "mysql2";
-import { db } from "../../databaseCon/Database";
+import { dbPublic } from "../../databaseCon/Database";
 import { Career, CareerDB } from "../../model/Career";
 import { selectCount } from "../../model/Generics";
 import { KeywordDAO } from "./KeywordDAO";
@@ -19,7 +19,7 @@ export class CareerDAO {
     return new Promise((/*callbacks*/ resolve, reject) => {
       /*Database requests are handled with Promises*/
       /*mysql2 driver requires classes that extend RowDataPacket*/
-      db.query<CareerDB[]>(
+      dbPublic.query<CareerDB[]>(
         /*Raw mysql query*/
         "SELECT * FROM CAREER WHERE idCareer = ?",
         /*Every sent paramether will match every '?' mark*/
@@ -60,7 +60,7 @@ export class CareerDAO {
 
   getAllCareers(): Promise<Career[]> {
     return new Promise((resolve, reject) => {
-      db.query<CareerDB[]>("select * from CAREER", async (err, res) => {
+      dbPublic.query<CareerDB[]>("select * from CAREER", async (err, res) => {
         if (err) reject(err);
         else {
           /*In order to create an array of type careers we must first get all careers
@@ -76,7 +76,7 @@ export class CareerDAO {
 
   getCareerByName(careerName: string): Promise<Career> {
     return new Promise((resolve, reject) => {
-      db.query<CareerDB[]>(
+      dbPublic.query<CareerDB[]>(
         "SELECT * FROM CAREER WHERE careerName = ?",
         [careerName],
         (err, res) => {
@@ -100,7 +100,7 @@ export class CareerDAO {
   /*Get all careers that are related to a specific centreId*/
   getCareersByCentre(centreId: number): Promise<Career[]> {
     return new Promise((resolve, reject) => {
-      db.query<CareerDB[]>(
+      dbPublic.query<CareerDB[]>(
         "select idCareer from CENTRE_CAREER where idCentre = ?",
         [centreId],
         async (err, res) => {

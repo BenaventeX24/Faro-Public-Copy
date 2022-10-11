@@ -1,7 +1,7 @@
 import Geocode from "react-geocode";
 
 // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
-Geocode.setApiKey("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
 // set response language. Defaults to english.
 Geocode.setLanguage("en");
@@ -21,14 +21,14 @@ Geocode.setLocationType("ROOFTOP");
 // Enable or disable logs. Its optional.
 Geocode.enableDebug();
 
-export const getCoordinatesFromAddress = (address) => {
-  Geocode.fromAddress(address).then(
+export const getCoordinatesFromAddress = async (address) => {
+  return Geocode.fromAddress(address).then(
     (response) => {
-      const { latitude, longitude } = response.results[0].geometry.location;
-      return { latitude, longitude };
+      const { lat, lng } = response.results[0].geometry.location;
+      return  { lat, lng };
     },
     (error) => {
-      console.error(error);
+      return error
     }
   );
 };
