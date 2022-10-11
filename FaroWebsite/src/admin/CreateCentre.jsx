@@ -37,7 +37,6 @@ const CreateCentre = () => {
 
     onSubmit: async (values) => {
       const parsedValues = await parseCentreFormValues(values)
-      console.log(parsedValues)
       CentreController.createCentre(parsedValues)
     },
   })

@@ -3,7 +3,6 @@ import clock from "../assets/images/clock.svg";
 import phone from "../assets/images/phone.svg";
 
 export default function InfoModal(props) {
-  console.log("props: " + props.idCentre);
   return (
     <>
       <ul className="bg-white flex flex-col text-black text-lg text-white absolute top-0 left-0 z-20 h-full w-[300px] p-4">

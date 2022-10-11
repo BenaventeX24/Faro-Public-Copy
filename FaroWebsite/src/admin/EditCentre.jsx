@@ -51,7 +51,6 @@ const EditCentre = () => {
 
     onSubmit: async (values) => {
       const parsedValues = await parseCentreFormValues(values)
-      console.log(parsedValues)
       CentreController.updateCentre(centreValues.idCentre, parsedValues)
     },
   })
@@ -69,7 +68,6 @@ const EditCentre = () => {
           formik.setFieldValue(item[0], [{ value: item[1], label: item[1] }])
         }
       })
-      console.log(values)
     }
   }
   const getCareerData = (data) => {
