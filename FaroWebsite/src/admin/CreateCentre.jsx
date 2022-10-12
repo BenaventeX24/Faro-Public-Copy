@@ -12,10 +12,14 @@ import { centreValidation } from "../utils/data"
 import { parseCentreFormValues } from "../utils/functions"
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
 import CentreController from "../networking/controllers/Centre-Controller"
+import ConfModal from "../components/ConfModal"
 
 const CreateCentre = () => {
   const [careers, setCareers] = useState([])
   const [showCareers, setShowCareers] = useState(false)
+  const [addressState, setAddressState] = useState(false)
+  const [centreAdded, setCentreAdded] = useState(false)
+  const [showModal, setShowModal] = useState(false) 
 
   useEffect(() => {
     formik.setFieldValue("careers", careers)
@@ -37,7 +41,25 @@ const CreateCentre = () => {
 
     onSubmit: async (values) => {
       const parsedValues = await parseCentreFormValues(values)
-      CentreController.createCentre(parsedValues)
+      if (parsedValues.latitude && parsedValues.longitude !== undefined) {
+        setAddressState(false)
+        CentreController.createCentre(parsedValues).then(response =>{
+          console.log(response)
+          if(response === 200){
+            setCentreAdded(true)
+            setShowModal(true)
+            handleResetForm()
+          }
+          setCentreAdded(false)
+        })
+        // if (request.state === 'OK' ) {    
+        //   setCentreAdded(true)
+        // }
+        //hacer pop up, segun que respuesta de el server es lo q ponemos, si bien o si mal
+        // handleResetForm()
+      }else{
+        setAddressState(true)
+      }
     },
   })
 
@@ -45,8 +67,14 @@ const CreateCentre = () => {
     setCareers((item) => [...item, data])
   }
 
+  const handleResetForm = () => {
+    formik.resetForm()
+    setCareers([])
+  }
+
   return (
     <div className="w-85% h-full bg-firstBg">
+      <ConfModal show={showModal} close={() => setShowModal(false)}/> 
       <div className="w-95% h-full ml-auto">
         <form className="w-full h-full" onSubmit={formik.handleSubmit}>
           <div className="w-full h-1/5 flex items-center">
@@ -113,6 +141,15 @@ const CreateCentre = () => {
                     </div>
                   )}
                 </div>
+                  {addressState ? (
+                    <div className="relative">
+                      <p className="errorMessage absolute">
+                        Direccion incorrecta, inserte otra
+                      </p>
+                    </div>)
+                    :
+                    ''
+                }
               </div>
             </div>
             <div className="w-4/5 flex flex-col">
@@ -120,6 +157,7 @@ const CreateCentre = () => {
                 Privado/Publico
               </label>
               <CustomSelect
+                defaultValue={{value: 'Sin elegir', label: 'sin elegir'}}
                 name={"free"}
                 options={freeOptions}
                 value={formik.values.free}
@@ -163,6 +201,7 @@ const CreateCentre = () => {
                 Grado
               </label>
               <CustomSelect
+                defaultValue="no select"
                 name={"schoolarLevel"}
                 options={schoolarLevelOptions}
                 value={formik.values.schoolarLevel}
@@ -207,7 +246,7 @@ const CreateCentre = () => {
             </div>
             <div className="w-4/5 flex flex-col">
               <h1 className="text-base font-normal">Carreras</h1>
-              <div className="flex w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between">
+              <div className="flex w-full h-11 mt-4 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between dropdown">
                 <p className="text-placeHolderColor text-base my-auto pl-4">
                   Añadir carrera
                 </p>
@@ -249,7 +288,7 @@ const CreateCentre = () => {
               )}
             </div>
           </div>
-          <div className="w-full h-1/5 flex items-center">
+          <div className="w-full flex flex-col">
             <button
               className={`text-white cursor-pointer ml-auto mr-24 ${
                 !formik.isValid && formik.submitCount > 0
