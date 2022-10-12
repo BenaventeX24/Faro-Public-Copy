@@ -2,7 +2,9 @@ import { OkPacket } from "mysql2";
 import { dbAdmin } from "../../databaseCon/Database";
 import { Career, CareerDB } from "../../model/Career";
 import { selectCount } from "../../model/Generics";
-import { KeywordDAO } from "./KeywordDAO";
+import { CareerPublicDAO } from "../public/CareerPublicDAO";
+const careerDB = new CareerPublicDAO();
+import { KeywordDAO } from "./KeywordAdminDAO";
 const keywordDB = new KeywordDAO();
 
 /*-
@@ -58,82 +60,14 @@ export class CareerAdminDAO {
     });
   }
 
-  getAllCareers(): Promise<Career[]> {
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CareerDB[]>("select * from CAREER", async (err, res) => {
-        if (err) reject(err);
-        else {
-          /*In order to create an array of type careers we must first get all careers
-          Promise.all is a method from promise that will multiple allow asynchronic call*/
-          const careers = await Promise.all(
-            res.map((career) => this.getCareerById(career.idCareer))
-          );
-          resolve(careers);
-        }
-      });
-    });
-  }
-
-  getCareerByName(careerName: string): Promise<Career> {
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CareerDB[]>(
-        "SELECT * FROM CAREER WHERE careerName = ?",
-        [careerName],
-        (err, res) => {
-          if (err) reject(err);
-          else {
-            /*In order to avoid repitive code, this method only gets the id from row
-            that matches that name and then calls the 'getById' */
-            if (res?.[0] !== undefined) {
-              this.getCareerById(res?.[0].idCareer).then((career) => {
-                resolve(career);
-              });
-            } else {
-              reject("Career not found");
-            }
-          }
-        }
-      );
-    });
-  }
-
-  /*Get all careers that are related to a specific centreId*/
-  getCareersByCentre(centreId: number): Promise<Career[]> {
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CareerDB[]>(
-        "select idCareer from CENTRE_CAREER where idCentre = ?",
-        [centreId],
-        async (err, res) => {
-          if (err) reject(err);
-          else {
-            if (res?.[0] !== undefined) {
-              await Promise.all(
-                res.map((career) => this.getCareerById(career.idCareer))
-              ).then((careers) => resolve(careers));
-            } else reject(Error("No_careers"));
-          }
-        }
-      );
-    });
-  }
-
   vinculateCentreCareer(idCentre: number, idCareer: number) {
     return new Promise((resolve, reject) => {
       dbAdmin.query<OkPacket>(
         "insert into CENTRE_CAREER (idCentre, idCareer) values(?,?)",
         [idCentre, idCareer],
         (err, res) => {
-          if (err) {
-            if (err.code === "ER_DUPLICATE_ENTRY") {
-              resolve(err);
-            }
-          } else resolve(res);
-          if (err) {
-            if (err.code === "ER_DUPLICATE_ENTRY") {
-              console.log("already vinculated");
-              resolve(err);
-            }
-          } else resolve(res);
+          if (err) reject(err);
+          else resolve(res);
         }
       );
     });
@@ -141,8 +75,7 @@ export class CareerAdminDAO {
 
   clearCareers(idCentre: number): Promise<selectCount[]> {
     return new Promise(async (resolve, reject) => {
-      const careers = await this.getAllCareers();
-      const careers = await this.getAllCareers();
+      const careers = await careerDB.getAllCareers();
       careers.forEach((career) => {
         dbAdmin.query<selectCount[]>(
           "select count(idCareer) as countResult from CENTRE_CAREER where idCareer=?",
@@ -151,7 +84,6 @@ export class CareerAdminDAO {
             if (err) reject(err);
             else {
               if (res?.[0].countResult === 0) {
-              if (res?.[0].countResult == 0) {
                 await this.deleteCareer(career.getIdCareer(), idCentre);
               }
               resolve(res);
@@ -162,8 +94,10 @@ export class CareerAdminDAO {
     });
   }
 
-  createCareer(careers: Career[], centreId: number): Promise<OkPacket> {
-  createCareer(careers: Career[], centreId: number): Promise<OkPacket> {
+  createCareerVinculateCentre(
+    careers: Career[],
+    centreId: number
+  ): Promise<OkPacket> {
     return new Promise((resolve, reject) => {
       careers.forEach((career) => {
         dbAdmin.query<OkPacket>(
@@ -179,8 +113,8 @@ export class CareerAdminDAO {
               /*If there's already a career with that name*/
               if (err.code === "ER_DUP_ENTRY") {
                 /*then get that career*/
-                this.getCareerByName(career.getCareerName())
-                this.getCareerByName(career.getCareerName())
+                careerDB
+                  .getCareerByName(career.getCareerName())
                   .then((c) => {
                     /*and just vinculate it to the centre*/
                     this.vinculateCentreCareer(centreId, c.getIdCareer());
@@ -191,7 +125,6 @@ export class CareerAdminDAO {
               }
             } else {
               /*No errors from db*/
-              /*No errors from dbAdmin*/
               /*save keywords in variable*/
               const careerKeywords = career.getKeywords();
               if (careerKeywords !== undefined) {

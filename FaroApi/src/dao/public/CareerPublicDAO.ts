@@ -1,12 +1,7 @@
-<<<<<<< HEAD
 import { OkPacket } from "mysql2";
 import { dbPublic } from "../../databaseCon/Database";
 import { Career, CareerDB, CareerNameDB } from "../../model/Career";
 import { selectCount } from "../../model/Generics";
-=======
-import { dbPublic } from "../../databaseCon/Database";
-import { Career, CareerDB, CareerNameDB } from "../../model/Career";
->>>>>>> 9f981391a8bbfe82d0e6ca9d7fafed4b75aaafe2
 import { KeywordPublicDAO } from "./KeywordPublicDAO";
 const keywordDB = new KeywordPublicDAO();
 

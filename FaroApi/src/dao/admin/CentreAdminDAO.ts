@@ -1,16 +1,13 @@
 import { OkPacket } from "mysql2";
-import {
-  Centre,
-  CentreDB,
-  CentreScheduleDB,
-  schoolarLevelDB,
-} from "../../model/Centre";
+import { Centre, CentreDB } from "../../model/Centre";
 import { dbAdmin } from "../../databaseCon/Database";
 import { Career } from "../../model/Career";
 import { CareerAdminDAO } from "./CareerAdminDAO";
-import { resolve } from "path";
-import { selectCount } from "../../model/Generics";
-const careerDB = new CareerAdminDAO();
+import { CareerPublicDAO } from "../public/CareerPublicDAO";
+import { createCareerVinculateCentreService } from "../../services/CreateCareerVinculateCentreService";
+const careerAdminDB = new CareerAdminDAO();
+const careerPublicDB = new CareerPublicDAO();
+
 /*-
 Only first method (getCareerById) is explained in detail,
 every other method has only very specific comments
@@ -20,10 +17,6 @@ in order to avoid unnecessary excesive documentation
 export class CentreAdminDAO {
   /*Method of type Promise of type Centre*/
   getCentre(id: number): Promise<Centre | undefined> {
-export class CentreDAO {
-  /*Method of type Promise of type Centre*/
-  getCentre(id: number): Promise<Centre | undefined> {
-    console.log("XDD: " + id);
     let centre: Centre;
     /*Database request are handled with Promises*/
     return new Promise((resolve, reject) => {
@@ -57,92 +50,13 @@ export class CentreDAO {
                 centreData.phoneNumber
               );
               /*then call method getCareers from careerDB in order to set the careers of the centre*/
-              await careerDB
-              await careerDB
+              await careerPublicDB
                 .getCareersByCentre(centre.getIdCentre())
                 .then((careers) => {
                   centre.setCareers(careers);
                 })
                 .catch((err) => resolve(centre));
               resolve(centre);
-            } else {
-              reject("Centre not found");
-            }
-          }
-        }
-      );
-    });
-  }
-  getAllCentres(): Promise<Centre[]> {
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CentreDB[]>("SELECT * FROM CENTRE", async (err, res) => {
-        if (err) reject(err);
-        else {
-          /*In order to create an array of type centre we must first get all centres.
-          Promise.all is a method from promise that will multiple allow asynchronic call*/
-          const centres = await Promise.all(
-            res.map((centre) => this.getCentre(centre.idCentre))
-          );
-          resolve(centres);
-        }
-      });
-    });
-  }
-
-  getAllCentresName(): Promise<Centre[]> {
-    const centres: Centre[] = [];
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CentreDB[]>(
-        "SELECT idCentre, centreName FROM CENTRE",
-        (err, res) => {
-          if (err) reject(err);
-          else {
-            res.forEach((cen) => {
-              centres.push(new Centre(cen.idCentre, cen.centreName));
-            });
-            resolve(centres);
-          }
-        }
-      );
-    });
-  }
-
-  getCentreByName(centreName: string): Promise<Centre | undefined> {
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CentreDB[]>(
-        "select * from CENTRE natural join CAREER where centreName = ?",
-        [centreName],
-        (err, res) => {
-          if (err) reject(err);
-          else {
-            if (res?.[0] !== undefined) {
-              /*In order to avoid repitive code, this method only gets the id from row
-            that matches that name and then calls the 'getById' */
-              this.getCentre(res?.[0].idCentre).then((centre) => {
-                resolve(centre);
-              });
-            } else {
-              reject("Centre not found");
-            }
-          }
-        }
-      );
-    });
-  }
-
-  /*Get centres that are related to a specific career*/
-  getCentresByCareer(idCareer: number): Promise<Centre | undefined> {
-    return new Promise((resolve, reject) => {
-      dbAdmin.query<CentreDB[]>(
-        "select idCentre from CAREER natural join CENTRE_CAREER where idCareer = ?",
-        [idCareer],
-        (err, res) => {
-          if (err) reject(err);
-          else {
-            if (res?.[0]) {
-              this.getCentre(res?.[0].idCentre).then((centre) => {
-                resolve(centre);
-              });
             } else {
               reject("Centre not found");
             }
@@ -197,20 +111,15 @@ export class CentreDAO {
             );
             /*For every given career vinculate it to the centre*/
             if (centreCareers.length > 0) {
-              await careerDB
-                .createCareer(centreCareers, res.insertId)
-                .then(() => {
-                  this.getCentre(res.insertId)
-                    .then((centre) => resolve(centre!))
-                    .catch(reject);
-                });
+              createCareerVinculateCentreService(
+                centreCareers,
+                res.insertId
+              ).then(() => {
+                this.getCentre(res.insertId)
+                  .then((centre) => resolve(centre!))
+                  .catch(reject);
+              });
             }
-            /*else {
-              this.getCentre(res.insertId)
-                .then((centre) => resolve(centre!))
-                .catch(reject);
-
-            }*/
           }
         }
       );
@@ -283,12 +192,11 @@ export class CentreDAO {
               centre.getSchoolarLevel()
             );
             await this.updateSchedules(centre.getCentreSchedules(), idCentre);
-            if (centreCareers.length > 0) {
-              await careerDB.createCareer(centreCareers, idCentre);
-            }
-            if (centreCareers.length > 0) {
-              await careerDB.createCareer(centreCareers, idCentre);
-            }
+            if (centreCareers.length > 0)
+              await createCareerVinculateCentreService(
+                centreCareers,
+                res.insertId
+              );
             this.getCentre(idCentre)
               .then((centre) => resolve(centre!))
               .catch(reject);
@@ -309,8 +217,7 @@ export class CentreDAO {
             if (res.affectedRows === 0) reject(Error("Centre not found"));
             else {
               await this.deleteSchedules(idCentre);
-              await careerDB.clearCareers(idCentre);
-              await careerDB.clearCareers(idCentre);
+              await careerAdminDB.clearCareers(idCentre);
               resolve(res.affectedRows);
             }
           }
@@ -318,6 +225,4 @@ export class CentreDAO {
       );
     });
   }
-}
-}
 }
