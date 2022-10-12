@@ -128,6 +128,12 @@ export class CareerAdminDAO {
               resolve(err);
             }
           } else resolve(res);
+          if (err) {
+            if (err.code === "ER_DUPLICATE_ENTRY") {
+              console.log("already vinculated");
+              resolve(err);
+            }
+          } else resolve(res);
         }
       );
     });
@@ -135,6 +141,7 @@ export class CareerAdminDAO {
 
   clearCareers(idCentre: number): Promise<selectCount[]> {
     return new Promise(async (resolve, reject) => {
+      const careers = await this.getAllCareers();
       const careers = await this.getAllCareers();
       careers.forEach((career) => {
         dbAdmin.query<selectCount[]>(
@@ -144,6 +151,7 @@ export class CareerAdminDAO {
             if (err) reject(err);
             else {
               if (res?.[0].countResult === 0) {
+              if (res?.[0].countResult == 0) {
                 await this.deleteCareer(career.getIdCareer(), idCentre);
               }
               resolve(res);
@@ -154,6 +162,7 @@ export class CareerAdminDAO {
     });
   }
 
+  createCareer(careers: Career[], centreId: number): Promise<OkPacket> {
   createCareer(careers: Career[], centreId: number): Promise<OkPacket> {
     return new Promise((resolve, reject) => {
       careers.forEach((career) => {
@@ -171,6 +180,7 @@ export class CareerAdminDAO {
               if (err.code === "ER_DUP_ENTRY") {
                 /*then get that career*/
                 this.getCareerByName(career.getCareerName())
+                this.getCareerByName(career.getCareerName())
                   .then((c) => {
                     /*and just vinculate it to the centre*/
                     this.vinculateCentreCareer(centreId, c.getIdCareer());
@@ -181,6 +191,7 @@ export class CareerAdminDAO {
               }
             } else {
               /*No errors from db*/
+              /*No errors from dbAdmin*/
               /*save keywords in variable*/
               const careerKeywords = career.getKeywords();
               if (careerKeywords !== undefined) {
@@ -196,6 +207,32 @@ export class CareerAdminDAO {
           }
         );
       });
+    });
+  }
+
+  createCareer(career: Career): Promise<number> {
+    return new Promise((resolve, reject) => {
+      dbAdmin.query<OkPacket>(
+        "insert into CAREER (careerName, careerDescription, degree, duration) values(?,?,?,?)",
+        [
+          career.getCareerName(),
+          career.getCareerDescription(),
+          career.getDegree(),
+          career.getDuration(),
+        ],
+        (err, res) => {
+          if (err) reject(err);
+          else {
+            const careerKeywords = career.getKeywords();
+            if (careerKeywords !== undefined) {
+              careerKeywords.forEach(async (keyword) => {
+                await keywordDB.vinculateCareerKeyword(keyword, res.insertId);
+              });
+            }
+            resolve(res.insertId);
+          }
+        }
+      );
     });
   }
 

@@ -11,7 +11,6 @@ import { CareerAdminDAO } from "./CareerAdminDAO";
 import { resolve } from "path";
 import { selectCount } from "../../model/Generics";
 const careerDB = new CareerAdminDAO();
-
 /*-
 Only first method (getCareerById) is explained in detail,
 every other method has only very specific comments
@@ -21,6 +20,10 @@ in order to avoid unnecessary excesive documentation
 export class CentreAdminDAO {
   /*Method of type Promise of type Centre*/
   getCentre(id: number): Promise<Centre | undefined> {
+export class CentreDAO {
+  /*Method of type Promise of type Centre*/
+  getCentre(id: number): Promise<Centre | undefined> {
+    console.log("XDD: " + id);
     let centre: Centre;
     /*Database request are handled with Promises*/
     return new Promise((resolve, reject) => {
@@ -55,6 +58,7 @@ export class CentreAdminDAO {
               );
               /*then call method getCareers from careerDB in order to set the careers of the centre*/
               await careerDB
+              await careerDB
                 .getCareersByCentre(centre.getIdCentre())
                 .then((careers) => {
                   centre.setCareers(careers);
@@ -69,7 +73,6 @@ export class CentreAdminDAO {
       );
     });
   }
-
   getAllCentres(): Promise<Centre[]> {
     return new Promise((resolve, reject) => {
       dbAdmin.query<CentreDB[]>("SELECT * FROM CENTRE", async (err, res) => {
@@ -283,6 +286,9 @@ export class CentreAdminDAO {
             if (centreCareers.length > 0) {
               await careerDB.createCareer(centreCareers, idCentre);
             }
+            if (centreCareers.length > 0) {
+              await careerDB.createCareer(centreCareers, idCentre);
+            }
             this.getCentre(idCentre)
               .then((centre) => resolve(centre!))
               .catch(reject);
@@ -304,6 +310,7 @@ export class CentreAdminDAO {
             else {
               await this.deleteSchedules(idCentre);
               await careerDB.clearCareers(idCentre);
+              await careerDB.clearCareers(idCentre);
               resolve(res.affectedRows);
             }
           }
@@ -311,4 +318,6 @@ export class CentreAdminDAO {
       );
     });
   }
+}
+}
 }

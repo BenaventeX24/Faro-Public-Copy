@@ -1,7 +1,7 @@
 import express from "express";
 const app = express();
 
-import { requireJwtMiddleware } from "./controllers/admin/AdminController";
+import { JwtMiddleware } from "./controllers/configuration/middleware/JWTMiddleware";
 import login from "./controllers/admin/AdminController";
 
 import centresAdmin from "./controllers/admin/CentreController";
@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 
 /*Listen endpoints of AdminController in /login */
 /*No Middleware configured*/
+
 app.use("/login", login);
 
 app.use("/centres", centresPublic);
@@ -31,7 +32,7 @@ app.use("/careers", careersPublic);
 
 /*Middleware that'll control JWT, this app uses refresh token. More details in AdminController class*/
 /*Middleware is active from now on*/
-app.use(requireJwtMiddleware);
+app.use(JwtMiddleware);
 
 /*Listen routes*/
 app.use("/centres", centresAdmin);
