@@ -9,11 +9,11 @@ import {
 import CustomSelect from "../components/CustomSelect"
 import CustomMultiSelect from "../components/CustomMultiSelect"
 import { centreValidation } from "../utils/data"
-import { handleLoginRedirect, parseCentreFormValues } from "../utils/functions"
+import { parseCentreFormValues } from "../utils/functions"
 import { ChevronDownIcon, MinusIcon } from "@heroicons/react/24/outline"
 import CentreController from "../networking/controllers/Centre-Controller"
 import CustomToast from "../components/CustomToast"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom"
 
 const CreateCentre = () => {
   const [careers, setCareers] = useState([])
@@ -22,7 +22,6 @@ const CreateCentre = () => {
   const [centreAdded, setCentreAdded] = useState(false)
   const [showToast, setShowToast] = useState(null)
   let navigate = useNavigate()
-  
 
   useEffect(() => {
     formik.setFieldValue("careers", careers)
@@ -46,27 +45,28 @@ const CreateCentre = () => {
       const parsedValues = await parseCentreFormValues(values)
       if (parsedValues.latitude && parsedValues.longitude !== undefined) {
         setAddressState(false)
-        CentreController.createCentre(parsedValues).then(response =>{
-          if(response === 200){
-            setCentreAdded(true)
-            setShowToast(true)
-            handleResetForm()
-          }
-          else{
-            setCentreAdded(false)
-            setShowToast(true)
-          }
-        }).catch(err => {
-          if(err.status === 401){
-            navigate('/login')
-          }
-        })
-      }else{
-        setAddressState(true)  
+        CentreController.createCentre(parsedValues)
+          .then((response) => {
+            if (response === 200) {
+              setCentreAdded(true)
+              setShowToast(true)
+              handleResetForm()
+            } else {
+              setCentreAdded(false)
+              setShowToast(true)
+            }
+          })
+          .catch((err) => {
+            if (err.status === 401) {
+              navigate("/login")
+            }
+          })
+      } else {
+        setAddressState(true)
       }
       setCentreAdded(null)
       setShowToast(false)
-    }
+    },
   })
 
   const getCareerData = (data) => {
@@ -80,7 +80,16 @@ const CreateCentre = () => {
 
   return (
     <div className="w-85% h-full bg-firstBg">
-      <CustomToast show={showToast} close={() => setShowToast(false)} notifi={centreAdded? "centro añadido": "Hubo un problema, intente nuevamente"} state={centreAdded}/> 
+      <CustomToast
+        show={showToast}
+        close={() => setShowToast(false)}
+        notifi={
+          centreAdded
+            ? "centro añadido"
+            : "Hubo un problema, intente nuevamente"
+        }
+        state={centreAdded}
+      />
       <div className="w-95% h-full ml-auto">
         <form className="w-full h-full" onSubmit={formik.handleSubmit}>
           <div className="w-full h-1/5 flex items-center">
@@ -116,46 +125,44 @@ const CreateCentre = () => {
                   Direccion
                 </label>
                 <div className="w-full flex flex">
-                  <input
-                    className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
-                    name="addressStreet"
-                    placeholder="Agregar dirección del centro"
-                    onChange={formik.handleChange}
-                    value={formik.values.addressStreet}
-                    type="text"
-                  />
-                  {/* {(formik.touched.addressStreet && formik.errors.addressStreet) ||  (formik.touched.addressNumber && formik.errors.addressNumber) ?
-                    <div className="relative">
-                      <p className="errorMessage absolute">
-                        {formik.errors.addressStreet}
-                      </p>
-                    </div>
-                  } */}
-                  <input
-                    className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
-                    name="addressNumber"
-                    placeholder="Puerta"
-                    onChange={formik.handleChange}
-                    value={formik.values.addressNumber}
-                    type="number"
-                  />
-                  {/* {formik.touched.addressNumber && formik.errors.addressNumber && (
-                    <div className="relative">
-                      <p className="errorMessage absolute">
-                        {formik.errors.addressNumber}
-                      </p>
-                    </div>
-                  )} */}
+                  <div className="w-4/5 flex flex-col">
+                    <input
+                      className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
+                      name="addressStreet"
+                      placeholder="Agregar dirección del centro"
+                      onChange={formik.handleChange}
+                      value={formik.values.addressStreet}
+                      type="text"
+                    />
+                    {((formik.touched.addressStreet &&
+                      formik.errors.addressStreet) ||
+                      (formik.touched.addressNumber &&
+                        formik.errors.addressNumber)) && (
+                      <div className="relative">
+                        <p className="errorMessage absolute">
+                          La Direccion no es valida
+                        </p>
+                      </div>
+                    )}
+                    {addressState && (
+                      <div className="relative">
+                        <p className="errorMessage absolute">
+                          Direccion incorrecta, inserte otra
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="w-auto flex flex-col">
+                    <input
+                      className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
+                      name="addressNumber"
+                      placeholder="Puerta"
+                      onChange={formik.handleChange}
+                      value={formik.values.addressNumber}
+                      type="number"
+                    />
+                  </div>
                 </div>
-                  {addressState ? (
-                    <div className="relative">
-                      <p className="errorMessage absolute">
-                        Direccion incorrecta, inserte otra
-                      </p>
-                    </div>)
-                    :
-                    ''
-                }
               </div>
             </div>
             <div className="w-4/5 flex flex-col">
@@ -163,7 +170,7 @@ const CreateCentre = () => {
                 Privado/Publico
               </label>
               <CustomSelect
-                defaultValue={{value: 'Sin elegir', label: 'sin elegir'}}
+                defaultValue={{ value: "Sin elegir", label: "sin elegir" }}
                 name={"free"}
                 options={freeOptions}
                 value={formik.values.free}
