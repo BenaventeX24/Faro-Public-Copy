@@ -34,9 +34,10 @@ class ApiServiceClass {
       delete updatedConfig.body
       return await this.axios[method](url, body, updatedConfig)
     } catch (error) {
+      console.log(error)
       if (error.response && error.response.data) {
-        throw new ApiError({
-          message: error.response.data.message, // Si el backend envia un atributo message
+       throw new ApiError({
+          message: error.response.data, // Si el backend envia un atributo message
           status: error.response.status,
         })
       }

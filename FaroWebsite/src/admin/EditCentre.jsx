@@ -11,16 +11,21 @@ import { centreValidation } from "../utils/data"
 import { checkIfExists, parseCentreFormValues } from "../utils/functions"
 import SearchButton from "../components/searchButton"
 import CustomMultiSelect from "../components/CustomMultiSelect"
-import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
+import { ChevronDownIcon, MinusIcon } from "@heroicons/react/24/outline"
 import CentreController from "../networking/controllers/Centre-Controller"
 import CareerController from "../networking/controllers/Career-Controller"
 import { CareerSerializer } from "../networking/serializers/career-serializer"
+import { useNavigate } from "react-router-dom"
+import CustomToast from "../components/CustomToast"
 
 const EditCentre = () => {
   const [centresNames, setCentresNames] = useState([])
   const [centreValues, setCentreValues] = useState([])
   const [careers, setCareers] = useState([])
   const [showCareers, setShowCareers] = useState(false)
+  const [centreUpdated, setCentreUpdated] = useState(false)
+  const [showToast, setShowToast] = useState(null)
+  let navigate = useNavigate()
 
   useEffect(() => {
     async function fetchCentres() {
@@ -51,7 +56,21 @@ const EditCentre = () => {
 
     onSubmit: async (values) => {
       const parsedValues = await parseCentreFormValues(values)
-      CentreController.updateCentre(centreValues.idCentre, parsedValues)
+      CentreController.updateCentre(centreValues.idCentre, parsedValues).then(response =>{
+        if(response === 200){
+          setCentreUpdated(true)
+          setShowToast(true)
+          handleResetForm()
+        }
+        else{
+          setCentreUpdated(false)
+          setShowToast(true)
+        }
+      }).catch(err => {
+        if(err.status === 401){
+          navigate('/login')
+        }
+      })
     },
   })
   const searchCentreName = async (searchValue) => {
@@ -74,6 +93,11 @@ const EditCentre = () => {
     setCareers((item) => [...item, data])
   }
 
+  const handleResetForm = () => {
+    formik.resetForm()
+    setCareers([])
+  }
+
   const deleteCareer = (careerName) => {
     setCareers(
       careers.filter((career) => {
@@ -87,6 +111,7 @@ const EditCentre = () => {
 
   return (
     <div className="w-85% h-full bg-firstBg">
+      <CustomToast show={showToast} close={() => setShowToast(false)} notifi={centreUpdated? "centro editado correctamente": "Hubo un problema, intente nuevamente"} state={centreUpdated}/> 
       <div className="w-95% h-full ml-auto">
         <form className="w-full h-full" onSubmit={formik.handleSubmit}>
           <div className="w-full h-1/5 flex items-center">

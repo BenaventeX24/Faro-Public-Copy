@@ -10,7 +10,8 @@ export const centreValidation = () => Yup.object().shape({
   free: Yup.boolean().nullable()
     .required('Porfavor ingrese el tipo del centro'),
   phoneNumber: Yup.string()
-    .min(8, 'Ingrese un numero correcto'),
+    .min(8, 'Ingrese un numero correcto')
+    .max(8, 'Ingrese un numero correcto'),
   schoolarLevel: Yup.string()
     .required('Ingrese los grados del centro'),
   centreSchedules: Yup.array()

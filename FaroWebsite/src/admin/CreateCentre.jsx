@@ -9,17 +9,20 @@ import {
 import CustomSelect from "../components/CustomSelect"
 import CustomMultiSelect from "../components/CustomMultiSelect"
 import { centreValidation } from "../utils/data"
-import { parseCentreFormValues } from "../utils/functions"
-import { ChevronDownIcon, MinusIcon } from "@heroicons/react/outline"
+import { handleLoginRedirect, parseCentreFormValues } from "../utils/functions"
+import { ChevronDownIcon, MinusIcon } from "@heroicons/react/24/outline"
 import CentreController from "../networking/controllers/Centre-Controller"
-import ConfModal from "../components/ConfModal"
+import CustomToast from "../components/CustomToast"
+import { useNavigate } from 'react-router-dom'
 
 const CreateCentre = () => {
   const [careers, setCareers] = useState([])
   const [showCareers, setShowCareers] = useState(false)
   const [addressState, setAddressState] = useState(false)
   const [centreAdded, setCentreAdded] = useState(false)
-  const [showModal, setShowModal] = useState(false) 
+  const [showToast, setShowToast] = useState(null)
+  let navigate = useNavigate()
+  
 
   useEffect(() => {
     formik.setFieldValue("careers", careers)
@@ -44,23 +47,26 @@ const CreateCentre = () => {
       if (parsedValues.latitude && parsedValues.longitude !== undefined) {
         setAddressState(false)
         CentreController.createCentre(parsedValues).then(response =>{
-          console.log(response)
           if(response === 200){
             setCentreAdded(true)
-            setShowModal(true)
+            setShowToast(true)
             handleResetForm()
           }
-          setCentreAdded(false)
+          else{
+            setCentreAdded(false)
+            setShowToast(true)
+          }
+        }).catch(err => {
+          if(err.status === 401){
+            navigate('/login')
+          }
         })
-        // if (request.state === 'OK' ) {    
-        //   setCentreAdded(true)
-        // }
-        //hacer pop up, segun que respuesta de el server es lo q ponemos, si bien o si mal
-        // handleResetForm()
       }else{
-        setAddressState(true)
+        setAddressState(true)  
       }
-    },
+      setCentreAdded(null)
+      setShowToast(false)
+    }
   })
 
   const getCareerData = (data) => {
@@ -74,7 +80,7 @@ const CreateCentre = () => {
 
   return (
     <div className="w-85% h-full bg-firstBg">
-      <ConfModal show={showModal} close={() => setShowModal(false)}/> 
+      <CustomToast show={showToast} close={() => setShowToast(false)} notifi={centreAdded? "centro añadido": "Hubo un problema, intente nuevamente"} state={centreAdded}/> 
       <div className="w-95% h-full ml-auto">
         <form className="w-full h-full" onSubmit={formik.handleSubmit}>
           <div className="w-full h-1/5 flex items-center">
@@ -118,13 +124,13 @@ const CreateCentre = () => {
                     value={formik.values.addressStreet}
                     type="text"
                   />
-                  {formik.touched.addressStreet && formik.errors.addressStreet && (
+                  {/* {(formik.touched.addressStreet && formik.errors.addressStreet) ||  (formik.touched.addressNumber && formik.errors.addressNumber) ?
                     <div className="relative">
                       <p className="errorMessage absolute">
                         {formik.errors.addressStreet}
                       </p>
                     </div>
-                  )}
+                  } */}
                   <input
                     className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
                     name="addressNumber"
@@ -133,13 +139,13 @@ const CreateCentre = () => {
                     value={formik.values.addressNumber}
                     type="number"
                   />
-                  {formik.touched.addressNumber && formik.errors.addressNumber && (
+                  {/* {formik.touched.addressNumber && formik.errors.addressNumber && (
                     <div className="relative">
                       <p className="errorMessage absolute">
                         {formik.errors.addressNumber}
                       </p>
                     </div>
-                  )}
+                  )} */}
                 </div>
                   {addressState ? (
                     <div className="relative">

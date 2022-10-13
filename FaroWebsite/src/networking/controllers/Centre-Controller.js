@@ -58,6 +58,7 @@ export default class CentreController {
       body,
       header
     )
+    console.log(Response)
     return response.status
   }
 

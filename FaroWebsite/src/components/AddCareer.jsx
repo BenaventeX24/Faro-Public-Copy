@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import Modal from "react-modal"
 import { Formik, Field, Form } from "formik"
-import { ChevronDownIcon, MinusIcon, PlusIcon } from "@heroicons/react/outline"
+import { ChevronDownIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline"
 import { AddCareerValidation } from "../utils/data"
 import { preventEnterSubmit } from "../utils/functions"
 

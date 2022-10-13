@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import SearchButton from "../components/searchButton"
 import Modal from "react-modal"
-import { InformationCircleIcon } from "@heroicons/react/outline"
+import { InformationCircleIcon } from "@heroicons/react/24/outline"
 import CentreController from "../networking/controllers/Centre-Controller"
 
 const DeleteCentre = () => {
