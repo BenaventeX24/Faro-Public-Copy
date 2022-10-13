@@ -225,8 +225,6 @@ insert into CENTRE_CAREER values(3,6);
 create or replace view CENTRES_VW as select idCentre, centreName, free, addressStreet, addressNumber, latitude, longitude, phoneNumber, schoolarLevel, group_concat(centreSchedule) as centreSchedules from CENTRE natural left join CENTRE_SCHEDULES natural left join SCHOOLARLEVEL natural left join SCHEDULES group by (idCentre);
 create or replace view CAREERS_VW as select idCareer, careerName, careerDescription, degree, duration, group_concat(keyword) as keywords from CAREER natural  join CAREER_KEYWORD natural join KEYWORD group by idCareer;
 
-drop user 'DBAdmin';
-drop user 'FaroUser';
  create user 'DBAdmin' identified by 'deC3JGy4Pu';
  create user 'FaroUser'; 
  grant select on FARO.CENTRES_VW to 'FaroUser'@'%';
