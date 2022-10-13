@@ -135,9 +135,6 @@ Begin
 	End	//
 delimiter ;
 
-DBFiller_Keywords_Clear
-DBFiller_Centre_Delete
-
 delimiter //
 Create procedure DBFiller_Career_DesvinculateCentre(in idCareerP int, idCentreP int)
 Begin 
@@ -239,22 +236,3 @@ drop user if exists 'FaroUser'
 grant select, execute, delete, update, insert on FARO.* to 'DBAdmin'@'%';
 
 flush Privileges;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
