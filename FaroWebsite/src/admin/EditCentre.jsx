@@ -39,7 +39,6 @@ const EditCentre = () => {
     formik.setFieldValue("careers", careers)
   }, [careers])
 
-
   const formik = useFormik({
     initialValues: {
       centreName: "",
@@ -56,21 +55,22 @@ const EditCentre = () => {
 
     onSubmit: async (values) => {
       const parsedValues = await parseCentreFormValues(values)
-      CentreController.updateCentre(centreValues.idCentre, parsedValues).then(response =>{
-        if(response === 200){
-          setCentreUpdated(true)
-          setShowToast(true)
-          handleResetForm()
-        }
-        else{
-          setCentreUpdated(false)
-          setShowToast(true)
-        }
-      }).catch(err => {
-        if(err.status === 401){
-          navigate('/login')
-        }
-      })
+      CentreController.updateCentre(centreValues.idCentre, parsedValues)
+        .then((response) => {
+          if (response === 200) {
+            setCentreUpdated(true)
+            setShowToast(true)
+            handleResetForm()
+          } else {
+            setCentreUpdated(false)
+            setShowToast(true)
+          }
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+            navigate("/login")
+          }
+        })
     },
   })
   const searchCentreName = async (searchValue) => {
@@ -111,7 +111,16 @@ const EditCentre = () => {
 
   return (
     <div className="w-85% h-full bg-firstBg">
-      <CustomToast show={showToast} close={() => setShowToast(false)} notifi={centreUpdated? "centro editado correctamente": "Hubo un problema, intente nuevamente"} state={centreUpdated}/> 
+      <CustomToast
+        show={showToast}
+        close={() => setShowToast(false)}
+        notifi={
+          centreUpdated
+            ? "centro editado correctamente"
+            : "Hubo un problema, intente nuevamente"
+        }
+        state={centreUpdated}
+      />
       <div className="w-95% h-full ml-auto">
         <form className="w-full h-full" onSubmit={formik.handleSubmit}>
           <div className="w-full h-1/5 flex items-center">
@@ -162,40 +171,40 @@ const EditCentre = () => {
                 Dirección
               </label>
               <div className="w-full flex flex">
-              <div className="w-4/5 flex flex-col">
-                    <input
-                      className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
-                      name="addressStreet"
-                      placeholder="Agregar dirección del centro"
-                      onChange={formik.handleChange}
-                      value={formik.values.addressStreet}
-                      type="text"
-                    />
-                    {formik.touched.addressStreet && formik.errors.addressStreet && (
-                      <div className="relative">
-                        <p className="errorMessage absolute">
-                          {formik.errors.addressStreet}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="w-auto flex flex-col">
-                    <input
-                      className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
-                      name="addressNumber"
-                      placeholder="Puerta"
-                      onChange={formik.handleChange}
-                      value={formik.values.addressNumber}
-                      type="number"
-                    />
-                    {formik.touched.addressNumber && formik.errors.addressNumber && (
-                      <div>
-                        <p className="errorMessage absolute">
-                          {formik.errors.addressNumber}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+                <div className="w-4/5 flex flex-col">
+                  <input
+                    className="w-full h-11 pl-4 bg-secondBg rounded-l-md border-2 border-firstColor"
+                    name="addressStreet"
+                    placeholder="Agregar dirección del centro"
+                    onChange={formik.handleChange}
+                    value={formik.values.addressStreet}
+                    type="text"
+                  />
+                  {formik.touched.addressStreet && formik.errors.addressStreet && (
+                    <div className="relative">
+                      <p className="errorMessage absolute">
+                        {formik.errors.addressStreet}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="w-auto flex flex-col">
+                  <input
+                    className="w-16 h-11 pl-2 bg-secondBg rounded-r-md border-2 border-firstColor"
+                    name="addressNumber"
+                    placeholder="Puerta"
+                    onChange={formik.handleChange}
+                    value={formik.values.addressNumber}
+                    type="number"
+                  />
+                  {formik.touched.addressNumber && formik.errors.addressNumber && (
+                    <div>
+                      <p className="errorMessage absolute">
+                        {formik.errors.addressNumber}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="w-4/5 flex flex-col row-start-3">
