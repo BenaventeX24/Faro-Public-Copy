@@ -1,13 +1,3 @@
- create user 'DBAdmin' identified by 'deC3JGy4Pu';
- create user 'FaroUser';
- grant select on FARO.CENTRES_VW to 'FaroUser'@'%';
- grant select on FARO.CAREERS_VW to 'FaroUser'@'%';
- grant select on FARO.CENTRE_CAREER to 'FaroUser'@'%';
-
-grant select, execute, delete, update, insert on FARO.* to 'DBAdmin'@'%';
-
-flush Privileges;
-
 drop  database if exists FARO;
 create database FARO;
 use FARO;
@@ -244,9 +234,15 @@ select * from centre_career;
 
 SELECT idCareer, careerName FROM CAREERS_VW;
 
+ create user 'DBAdmin' identified by 'deC3JGy4Pu';
+ create user 'FaroUser';
+ grant select on FARO.CENTRES_VW to 'FaroUser'@'%';
+ grant select on FARO.CAREERS_VW to 'FaroUser'@'%';
+ grant select on FARO.CENTRE_CAREER to 'FaroUser'@'%';
 
+grant select, execute, delete, update, insert on FARO.* to 'DBAdmin'@'%';
 
-
+flush Privileges;
 
 
 
