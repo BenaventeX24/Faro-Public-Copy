@@ -1,7 +1,17 @@
-import { Centre, CentreCoordinates, CentreDB } from "../../model/Centre";
+import { OkPacket } from "mysql2";
+import {
+  Centre,
+  CentreCoordinates,
+  CentreDB,
+  CentreScheduleDB,
+  schoolarLevelDB,
+} from "../../model/Centre";
 import { dbPublic } from "../../databaseCon/Database";
-import { CareerPublicDAO } from "./CareerPublicDAO";
 import { Career } from "../../model/Career";
+// import { CareerDAO } from "./CareerDAO";
+import { resolve } from "path";
+import { selectCount } from "../../model/Generics";
+import { CareerPublicDAO } from "./CareerPublicDAO";
 const careerDB = new CareerPublicDAO();
 
 /*-
@@ -14,7 +24,6 @@ export class CentrePublicDAO {
   /*Method of type Promise of type Centre*/
   getCentre(id: number): Promise<Centre | undefined> {
     let centre: Centre;
-    let careersArr = new Array<Career>();
     /*Database request are handled with Promises*/
     return new Promise((resolve, reject) => {
       /*Database requests are handled with Promises*/
@@ -50,9 +59,7 @@ export class CentrePublicDAO {
               await careerDB
                 .getCareersByCentre(centre.getIdCentre())
                 .then((careers) => {
-                  careers.length > 0
-                    ? centre.setCareers(careers)
-                    : centre.setCareers(careersArr);
+                  centre.setCareers(careers);
                 })
                 .catch((err) => resolve(centre));
               resolve(centre);
@@ -138,7 +145,7 @@ export class CentrePublicDAO {
   getAllCentresCoordinates(): Promise<CentreCoordinates[]> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreCoordinates[]>(
-        "SELECT idCentre, centreName, latitude, longitude FROM CENTRE",
+        "SELECT idCentre, latitude, longitude FROM CENTRE",
         (err, res) => {
           if (err) reject(err);
           else resolve(res);

@@ -1,5 +1,7 @@
+import { OkPacket } from "mysql2";
 import { dbPublic } from "../../databaseCon/Database";
 import { Career, CareerDB, CareerNameDB } from "../../model/Career";
+import { selectCount } from "../../model/Generics";
 import { KeywordPublicDAO } from "./KeywordPublicDAO";
 const keywordDB = new KeywordPublicDAO();
 

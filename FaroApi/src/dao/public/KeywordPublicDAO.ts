@@ -1,5 +1,6 @@
+import { OkPacket } from "mysql2";
 import { dbPublic } from "../../databaseCon/Database";
-import { KeywordDB } from "../../model/Generics";
+import { KeywordDB, selectCount } from "../../model/Generics";
 
 export class KeywordPublicDAO {
   getKeywordsByCareer(careerId: number): Promise<string[]> {
