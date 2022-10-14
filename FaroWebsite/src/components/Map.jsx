@@ -1,16 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  GoogleMap,
-  Marker,
-  withGoogleMap,
-  withScriptjs,
-  useJsApiLoader,
-} from "@react-google-maps/api";
+import React, { useState, useEffect } from "react";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import InfoModal from "./InfoModal";
 import logoDark from "../assets/images/logoDark.svg";
+import CentreController from "../networking/controllers/Centre-Controller";
 
 const containerStyle = {
-  height: "100vh",
+  height: "92vh",
   zIndex: 10,
 };
 
@@ -19,76 +14,36 @@ const center = {
   lng: -56.190687,
 };
 
-export const getCentres = async () => {
-  const response = await fetch(
-    `http://localhost:7000/centres/centresCoordinates`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return await response.json();
-};
-
-export const getCentreInfo = async (id) => {
-  const response = await fetch(
-    `http://localhost:7000/centres/centre?id=` + id,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  return await response.json();
-};
-
-function MyComponent() {
-  const [markers, setMarkers] = useState([]);
-  const [selectedCentreId, setSelectedCentreId] = useState(null);
+function MyComponent(props) {
   const [info, setInfo] = useState(null);
   const [map, setMap] = React.useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      // You can await here
-      let centres = await getCentres();
-      setMarkers(centres); // ...
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCentreId !== null) {
-      async function fetchData() {
-        // You can await here
-        let centre = await getCentreInfo(selectedCentreId);
-        setInfo(centre); // ...
-      }
-      fetchData();
-    }
-  }, [selectedCentreId]);
+  const [zoom, setZoom] = React.useState(center);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo",
   });
 
-  /*
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = React.useCallback(async function callback(map) {
+    console.log("executed");
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
     setMap(map);
   }, []);
-  */
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = React.useCallback(async function callback(map) {
     setMap(null);
   }, []);
+
+  const handleMarkerClick = (clicked) => {
+    async function fetchData() {
+      // You can await here
+      let centre = await CentreController.getCentre(clicked.idCentre);
+      setInfo(centre); // ...
+      setZoom({ lat: centre.latitude, lng: centre.longitude });
+    }
+    fetchData();
+  };
 
   var myStyles = [
     {
@@ -101,7 +56,6 @@ function MyComponent() {
   var myOptions = {
     styles: myStyles,
     zoom: 12,
-    center: center,
   };
 
   return isLoaded ? (
@@ -117,21 +71,22 @@ function MyComponent() {
           centreSchedules={info.centreSchedules}
           phoneNumber={info.phoneNumber}
           careers={info.careers}
+          openModal={setInfo}
         />
       )}
       <GoogleMap
         mapContainerStyle={containerStyle}
-        zoom={12}
-        onUnmount={onUnmount}
+        //onUnmount={onUnmount}
+        onLoad={onLoad}
         options={myOptions}
       >
         {/* Child components, such as markers, info windows, etc. */}
-        {markers.length > 0 &&
-          markers.map((marker) => {
+        {props.markers.length > 0 &&
+          props.markers.map((marker) => {
             return (
               <Marker
                 icon={logoDark}
-                onClick={() => setSelectedCentreId(marker.idCentre, true)}
+                onClick={() => handleMarkerClick(marker)}
                 key={marker.idCentre}
                 position={{ lat: marker.latitude, lng: marker.longitude }}
               />
