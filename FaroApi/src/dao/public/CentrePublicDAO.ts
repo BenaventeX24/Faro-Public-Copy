@@ -21,7 +21,7 @@ export class CentrePublicDAO {
       /*mysql2 driver requires classes that extend RowDataPacket*/
       dbPublic.query<CentreDB[]>(
         /*Raw mysql query*/
-        "select idCentre, centreName, free, addressStreet, addressNumber, latitude, longitude, phoneNumber, schoolarLevel, group_concat(centreSchedule) as centreSchedules from centre natural left join centre_schedules natural left join schoolarlevel natural left join SCHEDULES where idCentre=?",
+        "SELECT * FROM CENTRES_VW where idCentre=?",
         /*Every sent paramether will match every '?' mark*/
         [id],
         /*callback*/
@@ -67,17 +67,20 @@ export class CentrePublicDAO {
 
   getAllCentres(): Promise<Centre[]> {
     return new Promise((resolve, reject) => {
-      dbPublic.query<CentreDB[]>("SELECT * FROM CENTRE", async (err, res) => {
-        if (err) reject(err);
-        else {
-          /*In order to create an array of type centre we must first get all centres.
+      dbPublic.query<CentreDB[]>(
+        "SELECT * FROM CENTRES_VW",
+        async (err, res) => {
+          if (err) reject(err);
+          else {
+            /*In order to create an array of type centre we must first get all centres.
           Promise.all is a method from promise that will multiple allow asynchronic call*/
-          const centres = await Promise.all(
-            res.map((centre) => this.getCentre(centre.idCentre))
-          );
-          resolve(centres);
+            const centres = await Promise.all(
+              res.map((centre) => this.getCentre(centre.idCentre))
+            );
+            resolve(centres);
+          }
         }
-      });
+      );
     });
   }
 
@@ -85,7 +88,7 @@ export class CentrePublicDAO {
     const centres: Centre[] = [];
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(
-        "SELECT idCentre, centreName FROM CENTRE",
+        "SELECT idCentre, centreName FROM CENTRES_VW",
         (err, res) => {
           if (err) reject(err);
           else {
@@ -99,10 +102,33 @@ export class CentrePublicDAO {
     });
   }
 
+  getCentresByFilter(
+    queryFilter: string,
+    free: boolean,
+    schoolarLevel: string,
+    centreSchedule: string,
+    career: Career,
+    queryParams: any[]
+  ) {
+    const centres: Centre[] = [];
+
+    return new Promise((resolve, reject) => {
+      dbPublic.query<CentreDB[]>(queryFilter, queryParams, (err, res) => {
+        if (err) reject(err);
+        else {
+          res.forEach((cen) => {
+            centres.push(new Centre(cen.idCentre, cen.centreName));
+          });
+          resolve(centres);
+        }
+      });
+    });
+  }
+
   getCentreByName(centreName: string): Promise<Centre | undefined> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(
-        "select * from CENTRE natural join CAREER where centreName = ?",
+        "select * from CENTRES_VW where centreName = ?",
         [centreName],
         (err, res) => {
           if (err) reject(err);
@@ -125,7 +151,7 @@ export class CentrePublicDAO {
   getCentresCoordinates(idCentre: number): Promise<CentreCoordinates[]> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreCoordinates[]>(
-        "SELECT idCentre, latitude, longitude FROM CENTRE WHERE idCentre = ?",
+        "SELECT idCentre, latitude, longitude FROM CENTRES_VW WHERE idCentre = ?",
         [idCentre],
         (err, res) => {
           if (err) reject(err);
@@ -138,7 +164,7 @@ export class CentrePublicDAO {
   getAllCentresCoordinates(): Promise<CentreCoordinates[]> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreCoordinates[]>(
-        "SELECT idCentre, centreName, latitude, longitude FROM CENTRE",
+        "SELECT idCentre, centreName, latitude, longitude FROM CENTRES_VW",
         (err, res) => {
           if (err) reject(err);
           else resolve(res);
@@ -151,7 +177,7 @@ export class CentrePublicDAO {
   getCentresByCareer(idCareer: number): Promise<Centre | undefined> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(
-        "select idCentre from CAREER natural join CENTRE_CAREER where idCareer = ?",
+        "select idCentre from CAREERS_VW natural join CENTRE_CAREER where idCareer = ?",
         [idCareer],
         (err, res) => {
           if (err) reject(err);
@@ -174,7 +200,7 @@ export class CentrePublicDAO {
   ): Promise<CentreCoordinates[] | undefined> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreCoordinates[]>(
-        "select idCentre, centreName, latitude, longitude from centre where centreName like ?",
+        "select idCentre, centreName, latitude, longitude from CENTRES_VW where centreName like ?",
         [centreName + "%"],
         async (err, res) => {
           if (err) reject(err);

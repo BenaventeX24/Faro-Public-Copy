@@ -1,7 +1,5 @@
 import { dbPublic } from "../../databaseCon/Database";
 import { Career, CareerDB, CareerNameDB } from "../../model/Career";
-import { KeywordPublicDAO } from "./KeywordPublicDAO";
-const keywordDB = new KeywordPublicDAO();
 
 /*-
 Only first method (getCareerById) is explained in detail,
@@ -19,7 +17,7 @@ export class CareerPublicDAO {
       /*mysql2 driver requires classes that extend RowDataPacket*/
       dbPublic.query<CareerDB[]>(
         /*Raw mysql query*/
-        "SELECT * FROM CAREER WHERE idCareer = ?",
+        "select * FROM CAREERS_VW where idCareer = ?",
         /*Every sent paramether will match every '?' mark*/
         [careerId],
         /*callback*/
@@ -37,16 +35,10 @@ export class CareerPublicDAO {
                 careerR.careerName,
                 careerR.careerDescription,
                 careerR.grade,
-                careerR.duration
+                careerR.duration,
+                careerR.keywords.split(",")
               );
-              /*then call method getKeywords from keywordDAO in order to set the keywords of the career*/
-              keywordDB
-                .getKeywordsByCareer(career.getIdCareer())
-                .then((keywords) => {
-                  career.setKeywords(keywords);
-                  resolve(career);
-                });
-              /*If nothing was returned from database*/
+              resolve(career);
             } else {
               reject("Career not found");
             }
@@ -58,24 +50,27 @@ export class CareerPublicDAO {
 
   getAllCareers(): Promise<Career[]> {
     return new Promise((resolve, reject) => {
-      dbPublic.query<CareerDB[]>("select * from CAREER", async (err, res) => {
-        if (err) reject(err);
-        else {
-          /*In order to create an array of type careers we must first get all careers
+      dbPublic.query<CareerDB[]>(
+        "select * from CAREERS_VW",
+        async (err, res) => {
+          if (err) reject(err);
+          else {
+            /*In order to create an array of type careers we must first get all careers
           Promise.all is a method from promise that will multiple allow asynchronic call*/
-          const careers = await Promise.all(
-            res.map((career) => this.getCareerById(career.idCareer))
-          );
-          resolve(careers);
+            const careers = await Promise.all(
+              res.map((career) => this.getCareerById(career.idCareer))
+            );
+            resolve(careers);
+          }
         }
-      });
+      );
     });
   }
 
   getCareerByName(careerName: string): Promise<Career> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CareerDB[]>(
-        "SELECT * FROM CAREER WHERE careerName = ?",
+        "select * from CAREERS_VW where careerName = ?",
         [careerName],
         (err, res) => {
           if (err) reject(err);
@@ -119,7 +114,7 @@ export class CareerPublicDAO {
   getAllCareersName(careerName: string): Promise<CareerNameDB[] | undefined> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CareerNameDB[]>(
-        "SELECT idCareer, careerName FROM career WHERE careerName LIKE ?",
+        "select idCareer, careerName from CAREERS_VW",
         [careerName + "%"],
         async (err, res) => {
           if (err) reject(err);
@@ -134,7 +129,7 @@ export class CareerPublicDAO {
   ): Promise<CareerNameDB[] | undefined> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CareerNameDB[]>(
-        "SELECT idCareer, careerName FROM career WHERE careerName LIKE ?",
+        "select idCareer, careerName from CAREERS_VW where careerName like ?",
         [careerName + "%"],
         async (err, res) => {
           if (err) reject(err);

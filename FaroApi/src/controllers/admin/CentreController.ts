@@ -5,22 +5,16 @@ import { CentreAdminDAO } from "../../dao/admin/CentreAdminDAO";
 const centreDB = new CentreAdminDAO();
 import { Centre } from "../../model/Centre";
 import { Errors } from "../configuration/errors/Errors";
+import { CheckMissingProperty_Centre } from "../../services/CheckMissingProperty";
 
 dotenv.config();
 
 centresAdmin.post("/", (req, res) => {
   const centre: Centre = Object.assign(new Centre(), req.body);
-  let missingProperty = "";
 
-  Object.keys(centre).forEach((key) => {
-    if (centre[key] === null || centre[key] === undefined) {
-      if (key !== "idCentre") missingProperty = key;
-      return;
-    }
-  });
+  const checkCorrectBody = CheckMissingProperty_Centre(centre);
 
-  if (missingProperty !== "") Errors.missingProperty(res, missingProperty);
-  else
+  if (checkCorrectBody.ok)
     centreDB.createCentre(centre).then(
       () => {
         res.status(200).send("Centre succesfully created");
@@ -32,23 +26,17 @@ centresAdmin.post("/", (req, res) => {
         );
       }
     );
+  else Errors.missingProperty(res, checkCorrectBody.property);
 });
 
 centresAdmin.put("/centre", (req, res) => {
   const query = require("url").parse(req.url, true).query;
 
   const centre: Centre = Object.assign(new Centre(), req.body);
-  let missingProperty = "";
 
-  Object.keys(centre).forEach((key) => {
-    if (centre[key] === null || centre[key] === undefined) {
-      if (key !== "idCentre") missingProperty = key;
-      return;
-    }
-  });
+  const checkCorrectBody = CheckMissingProperty_Centre(centre);
 
-  if (missingProperty !== "") Errors.missingProperty(res, missingProperty);
-  else
+  if (checkCorrectBody.ok)
     centreDB.updateCentre(query.id, centre).then(
       () => {
         res.status(200).send("Centre succesfully edited");
@@ -57,6 +45,7 @@ centresAdmin.put("/centre", (req, res) => {
         Errors.resourceNotEdited(res, "Centre could not be edited : " + reason);
       }
     );
+  else Errors.missingProperty(res, checkCorrectBody.property);
 });
 
 centresAdmin.delete("/centre", (req, res) => {
