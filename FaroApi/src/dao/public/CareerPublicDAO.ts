@@ -1,5 +1,12 @@
+import { OkPacket } from "mysql2";
 import { dbPublic } from "../../databaseCon/Database";
 import { Career, CareerDB, CareerNameDB } from "../../model/Career";
+<<<<<<< HEAD
+=======
+import { selectCount } from "../../model/Generics";
+import { KeywordPublicDAO } from "./KeywordPublicDAO";
+const keywordDB = new KeywordPublicDAO();
+>>>>>>> 0a2b3e7cb218751ef8dffc6daeed3a476f326dd2
 
 /*-
 Only first method (getCareerById) is explained in detail,

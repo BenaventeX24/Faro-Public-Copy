@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 import SearchButton from "../components/searchButton"
-import { getCentresName, requestCentre } from "../api/api"
 import Modal from "react-modal"
-import { InformationCircleIcon } from "@heroicons/react/outline"
+import { InformationCircleIcon } from "@heroicons/react/24/outline"
+import CentreController from "../networking/controllers/Centre-Controller"
 
 const DeleteCentre = () => {
   const [centresNames, setCentresNames] = useState([])
@@ -11,13 +11,16 @@ const DeleteCentre = () => {
   const [missingCentre, setMissingCentre] = useState(false)
 
   useEffect(() => {
-    getCentresName().then((response) => {
-      setCentresNames(response.map((item) => item.centreName))
-    })
+    async function fetchCentres() {
+      const centres = await CentreController.getCentres()
+      setCentresNames(centres)
+    }
+    fetchCentres()
   }, [])
 
   const handleSearch = (searchValue) => {
-    setCentreName(searchValue)
+    const centres = centresNames.map((centre) => centre.centreName)
+    setCentreName(centresNames[centres.indexOf(searchValue)])
   }
 
   const handleClick = (event) => {
@@ -31,7 +34,7 @@ const DeleteCentre = () => {
   }
 
   const deleteCentre = () => {
-    requestCentre("/deleteCentre", "DELETE", centreName)
+    CentreController.deleteCentre(centreName.idCentre)
     closeModal()
   }
 
@@ -55,14 +58,14 @@ const DeleteCentre = () => {
           <h5 className="text-xl mb-2">Nombre del centro a eliminar </h5>
           <SearchButton
             placeholder="Ingrese nombre del centro a editar"
-            centresName={centresNames}
+            centresName={centresNames.map((centre) => centre.centreName)}
             className={
               "dropdown flex w-96 h-11 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between"
             }
             searchValue={handleSearch}
           ></SearchButton>
         </div>
-        <div className="w-full h-1/5 flex flex-col items-end">
+        <div className="w-full h-1/5 flex flex-col items-end smMinH:h-0">
           {missingCentre && (
             <p className="errorMessage mr-52">
               Ingrese un centro para eliminar
