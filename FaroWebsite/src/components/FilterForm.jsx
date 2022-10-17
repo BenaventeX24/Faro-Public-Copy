@@ -21,7 +21,7 @@ export default function FilterForm({filterData, filterCentre}) {
   const formik = useFormik({
     initialValues: {
       selectedCareer: 'all',
-      schedule: 'all',
+      centreSchedule: 'all',
       career: 'all',
       free: 'all',
       schoolarLevel: 'all',
@@ -115,9 +115,9 @@ export default function FilterForm({filterData, filterCentre}) {
               defaultValue="no select"
               name={"centreSchedule"}
               options={centreSchedule}
-              value={formik.values.schedule}
+              value={formik.values.centreSchedule}
               onChange={(value) =>
-                formik.setFieldValue("centreSchedule", value)
+                formik.setFieldValue("centreSchedule", value.value)
               }
               placeholder={"Horarios"}
             />
@@ -129,9 +129,9 @@ export default function FilterForm({filterData, filterCentre}) {
             <CustomSelect
               name={"SelectedCareer"}
               options={careersOptions}
-              value={formik.values.selectedCareer}
+              value={formik.values.career}
               onChange={(value) =>
-                formik.setFieldValue("SelectedCareer", value.value)
+                formik.setFieldValue("career", value.value)
               }
               placeholder={"Carreras"}
               className="text-white"

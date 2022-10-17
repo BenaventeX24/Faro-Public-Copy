@@ -3,7 +3,6 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import InfoModal from "./InfoModal";
 import logoDark from "../assets/images/logoDark.svg";
 import CentreController from "../networking/controllers/Centre-Controller";
-import { diffValue } from "../utils/functions";
 
 const containerStyle = {
   height: "100%",
@@ -18,7 +17,7 @@ const center = {
 function MyComponent({filterCentre, filters}) {
   const [info, setInfo] = useState(null);
   const [map, setMap] = useState(null);
-  const [zoom, setZoom] = useState(center);
+  const [zoom, setZoom] = useState(12);
   const [markers, setMarkers] = useState(null);
 
   useEffect(() =>{
@@ -28,20 +27,22 @@ function MyComponent({filterCentre, filters}) {
     getCentresCoords()
   },[])
 
-  useEffect(() =>{
+  useEffect(() => {
     if (filters){
-    console.log(filters)
-    const searchBy = diffValue(filters, 'all') 
-    console.log(searchBy)
-    if (searchBy){
-      console.log(CentreController.getCentresByFilter(searchBy[0], searchBy[1]))
-    }
-    }
+        setMarkers(filters)
+      }
+  },[filters])
+
+  useEffect(() =>{
     if (filterCentre){
       console.log(filterCentre)
      setMarkers([filterCentre]) 
     }
-  },[filters, filterCentre])
+  },[filterCentre])
+
+  useEffect(() =>{
+    console.log('markers',markers)
+  },[markers])
   
 
   const { isLoaded } = useJsApiLoader({
@@ -63,7 +64,6 @@ function MyComponent({filterCentre, filters}) {
     async function fetchData() {
       let centre = await CentreController.getCentre(clicked.idCentre);
       setInfo(centre);
-      setZoom({ lat: centre.latitude, lng: centre.longitude });
     }
     fetchData();
   };
@@ -105,9 +105,9 @@ function MyComponent({filterCentre, filters}) {
         center={center}
         onLoad={onLoad}
         options={myOptions}
+        zoom={zoom}
       >
-        {markers &&(
-         markers.map((marker) => {
+        {markers?.map((marker) => {
             return (
               <Marker
                 icon={logoDark}
@@ -116,7 +116,7 @@ function MyComponent({filterCentre, filters}) {
                 position={{ lat: marker.latitude, lng: marker.longitude }}
               />
             );
-          }))
+          })
         }
       </GoogleMap>
     </div>

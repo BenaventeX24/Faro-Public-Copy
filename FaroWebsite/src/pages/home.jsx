@@ -2,13 +2,23 @@ import React, { useState } from "react";
 import FilterForm from "../components/FilterForm";
 import Map from "../components/Map";
 import NavBar from "../components/NavBar";
+import CentreController from "../networking/controllers/Centre-Controller";
+import { diffValue } from "../utils/functions";
 
  const Home = () => {
   const [filterData, setFilterData] = useState();
   const [filterCentre, setFilterCentre] = useState();
 
 const handleFilterData = (data) => {
-  setFilterData(data)
+  const searchBy = diffValue(data, 'all') 
+      console.log('searchBy',searchBy)
+        if (searchBy){
+          console.log('buenas')
+          const getMarkers = async () => {
+            setFilterData(await CentreController.getCentresByFilter(searchBy[0], searchBy[1]))
+          }
+          getMarkers()
+        }
 }
 const handleFilterCentre = (centre) => {
   setFilterCentre(centre)
