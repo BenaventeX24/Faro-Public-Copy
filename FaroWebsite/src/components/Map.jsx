@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import InfoModal from "./InfoModal";
 import logoDark from "../assets/images/logoDark.svg";
 import CentreController from "../networking/controllers/Centre-Controller";
+import { diffValue } from "../utils/functions";
 
 const containerStyle = {
-  height: "92vh",
+  height: "100%",
   zIndex: 10,
 };
 
@@ -14,32 +15,54 @@ const center = {
   lng: -56.190687,
 };
 
-function MyComponent(props) {
+function MyComponent({filterCentre, filters}) {
   const [info, setInfo] = useState(null);
-  const [map, setMap] = React.useState(null);
-  const [zoom, setZoom] = React.useState(center);
+  const [map, setMap] = useState(null);
+  const [zoom, setZoom] = useState(center);
+  const [markers, setMarkers] = useState(null);
+
+  useEffect(() =>{
+    const getCentresCoords = async () => {
+      setMarkers(await CentreController.getCentresCoordinates())
+    }
+    getCentresCoords()
+  },[])
+
+  useEffect(() =>{
+    if (filters){
+    console.log(filters)
+    const searchBy = diffValue(filters, 'all') 
+    console.log(searchBy)
+    if (searchBy){
+      console.log(CentreController.getCentresByFilter(searchBy[0], searchBy[1]))
+    }
+    }
+    if (filterCentre){
+      console.log(filterCentre)
+     setMarkers([filterCentre]) 
+    }
+  },[filters, filterCentre])
+  
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo",
+    googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo", //va en el .env
   });
 
-  const onLoad = React.useCallback(async function callback(map) {
-    console.log("executed");
+  const onLoad = useCallback(async function callback(map) {
     const bounds = new window.google.maps.LatLngBounds(center);
     map.fitBounds(bounds);
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(async function callback(map) {
+  const onUnmount = useCallback(async function callback(map) {
     setMap(null);
   }, []);
 
   const handleMarkerClick = (clicked) => {
     async function fetchData() {
-      // You can await here
       let centre = await CentreController.getCentre(clicked.idCentre);
-      setInfo(centre); // ...
+      setInfo(centre);
       setZoom({ lat: centre.latitude, lng: centre.longitude });
     }
     fetchData();
@@ -56,10 +79,12 @@ function MyComponent(props) {
   var myOptions = {
     styles: myStyles,
     zoom: 12,
+    disableDefaultUI: true,
+
   };
 
   return isLoaded ? (
-    <div className="h-full relative">
+    <div className="h-full">
       {info && (
         <InfoModal
           idCentre={info.idCentre}
@@ -77,12 +102,12 @@ function MyComponent(props) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         //onUnmount={onUnmount}
+        center={center}
         onLoad={onLoad}
         options={myOptions}
       >
-        {/* Child components, such as markers, info windows, etc. */}
-        {props.markers.length > 0 &&
-          props.markers.map((marker) => {
+        {markers &&(
+         markers.map((marker) => {
             return (
               <Marker
                 icon={logoDark}
@@ -91,7 +116,8 @@ function MyComponent(props) {
                 position={{ lat: marker.latitude, lng: marker.longitude }}
               />
             );
-          })}
+          }))
+        }
       </GoogleMap>
     </div>
   ) : (

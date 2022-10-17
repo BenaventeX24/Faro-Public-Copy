@@ -42,3 +42,13 @@ export const preventEnterSubmit  = (event) => {
     event.preventDefault();
   }
 }
+
+export const diffValue = (obj, value) => { 
+  let values = []
+  Object.entries(obj).forEach((item) => {
+  if (item[1] !== value){
+    values =  [item[0], item[1]]
+  } 
+})
+return values
+}
