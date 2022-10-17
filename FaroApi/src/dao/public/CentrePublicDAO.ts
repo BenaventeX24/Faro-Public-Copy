@@ -14,7 +14,7 @@ export class CentrePublicDAO {
   /*Method of type Promise of type Centre*/
   getCentre(id: number): Promise<Centre | undefined> {
     let centre: Centre;
-    let careersArr = new Array<Career>();
+    const careersArr = new Array<Career>();
     /*Database request are handled with Promises*/
     return new Promise((resolve, reject) => {
       /*Database requests are handled with Promises*/
