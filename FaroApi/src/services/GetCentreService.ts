@@ -24,38 +24,37 @@ export const getCentreByParams = (query): Promise<Centre | any> => {
       );
     } else {
       let queryFilter = "select * from CENTRES_VW where ";
-      const queryParams = []
+      const queryParams = [];
 
       queryFilter = queryFilter + (query.free ? "free=? " : "free=free ");
-      if(query.free) queryParams.push(Boolean(query.free))
+      if (query.free) queryParams.push(Boolean(query.free));
 
-      queryFilter = queryFilter + (query.schoolarLevel ? "and schoolarLevel=? " : "and schoolarLevel=schoolarLevel ");
-      if(query.schoolarLevel) queryParams.push(query.schoolarLevel)
+      queryFilter =
+        queryFilter +
+        (query.schoolarLevel
+          ? "and schoolarLevel=? "
+          : "and schoolarLevel=schoolarLevel ");
+      if (query.schoolarLevel) queryParams.push(query.schoolarLevel);
 
-      queryFilter = queryFilter + (query.centreSchedules ? "and centreSchedules like ? " : "and centreSchedules = centreSchedules ");
-      if(query.centreSchedules) queryParams.push("%" + query.centreSchedules + "%")
+      queryFilter =
+        queryFilter +
+        (query.centreSchedules
+          ? "and centreSchedules like ? "
+          : "and centreSchedules = centreSchedules ");
+      if (query.centreSchedules)
+        queryParams.push("%" + query.centreSchedules + "%");
 
       console.log(queryFilter);
       console.log(queryParams);
 
-      centreDB
-        .getCentresByFilter(
-          queryFilter,
-          query.free,
-          query.schoolarLevel,
-          query.centreSchedule,
-          query.career,
-          queryParams
-        )
-        .then(
-          (centre) => {
-            resolve(centre);
-          },
-          (reason) => {
-            reject(reason);
-          }
-        );
+      centreDB.getCentresByFilter(queryFilter, query.free).then(
+        (centre) => {
+          resolve(centre);
+        },
+        (reason) => {
+          reject(reason);
+        }
+      );
     }
   });
-
 };

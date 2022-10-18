@@ -21,7 +21,7 @@ export class CentrePublicDAO {
       /*mysql2 driver requires classes that extend RowDataPacket*/
       dbPublic.query<CentreDB[]>(
         /*Raw mysql query*/
-        "SELECT * FROM centre where idCentre=?",
+        "SELECT * FROM CENTRES_VW where idCentre=?",
         /*Every sent paramether will match every '?' mark*/
         [id],
         /*callback*/
@@ -103,14 +103,7 @@ export class CentrePublicDAO {
     });
   }
 
-  getCentresByFilter(
-    queryFilter: string,
-    free: boolean,
-    schoolarLevel: string,
-    centreSchedules: string,
-    career: Career,
-    queryParams: any[]
-  ) {
+  getCentresByFilter(queryFilter: string, queryParams: any[]) {
     const centres: Centre[] = [];
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(queryFilter, queryParams, (err, res) => {
