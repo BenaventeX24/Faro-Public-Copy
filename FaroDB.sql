@@ -1,6 +1,9 @@
 drop  database if exists FARO;
 create database FARO;
 use FARO;
+-- user 'DBAdmin'@'localhost' identified by 'deC3JGy4Pu';
+-- drop user 'DBAdmin'@'localhost';
+-- create user 'FaroUser'@'localhost'; 
 
 create table CENTRE(
 idCentre INT auto_increment primary key,
@@ -231,3 +234,5 @@ create or replace view CAREERS_VW as select idCareer, careerName, careerDescript
 grant select, execute, delete, update, insert on FARO.* to 'DBAdmin'@'localhost';
 
 flush Privileges;
+
+select * from CENTRES_VW where free=false and schoolarLevel="Bachillerato" and centreSchedules like "%Completo%";

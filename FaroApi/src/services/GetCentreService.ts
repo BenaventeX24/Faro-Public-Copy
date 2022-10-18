@@ -27,13 +27,16 @@ export const getCentreByParams = (query): Promise<Centre | any> => {
       const queryParams = []
 
       queryFilter = queryFilter + (query.free ? "free=? " : "free=free ");
-      if(query.free) queryParams.push(query.free)
+      if(query.free) queryParams.push(Boolean(query.free))
 
       queryFilter = queryFilter + (query.schoolarLevel ? "and schoolarLevel=? " : "and schoolarLevel=schoolarLevel ");
       if(query.schoolarLevel) queryParams.push(query.schoolarLevel)
 
       queryFilter = queryFilter + (query.centreSchedules ? "and centreSchedules=? " : "and centreSchedules=centreSchedules ");
       if(query.centreSchedules) queryParams.push("%" + query.centreSchedules + "%")
+
+      console.log(queryFilter);
+      console.log(queryParams);
 
       centreDB
         .getCentresByFilter(
