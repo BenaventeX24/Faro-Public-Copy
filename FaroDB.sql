@@ -234,5 +234,3 @@ create or replace view CAREERS_VW as select idCareer, careerName, careerDescript
 grant select, execute, delete, update, insert on FARO.* to 'DBAdmin'@'localhost';
 
 flush Privileges;
-
-select * from CENTRES_VW where free=false and schoolarLevel="Bachillerato" and centreSchedules like "%Completo%";
