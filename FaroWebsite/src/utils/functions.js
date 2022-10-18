@@ -52,3 +52,16 @@ export const diffValue = (obj, value) => {
 })
 return values
 }
+
+export const addQueryParams= (values) => {
+  const valuesLength = values.length
+  let queryParams = ''
+  values.forEach((value,index) => {
+    if (index !== valuesLength - 1){
+    queryParams = `${queryParams}${value[0]}=${value[1]}&`
+  }else{
+    queryParams = `${queryParams}${value[0]}=${value[1]}`
+  }
+})
+return queryParams
+}
