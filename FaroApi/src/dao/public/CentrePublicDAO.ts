@@ -107,12 +107,11 @@ export class CentrePublicDAO {
     queryFilter: string,
     free: boolean,
     schoolarLevel: string,
-    centreSchedule: string,
+    centreSchedules: string,
     career: Career,
     queryParams: any[]
   ) {
     const centres: Centre[] = [];
-
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(queryFilter, queryParams, (err, res) => {
         if (err) reject(err);

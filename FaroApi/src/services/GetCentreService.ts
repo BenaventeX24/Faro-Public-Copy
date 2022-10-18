@@ -32,7 +32,7 @@ export const getCentreByParams = (query): Promise<Centre | any> => {
       queryFilter = queryFilter + (query.schoolarLevel ? "and schoolarLevel=? " : "and schoolarLevel=schoolarLevel ");
       if(query.schoolarLevel) queryParams.push(query.schoolarLevel)
 
-      queryFilter = queryFilter + (query.centreSchedules ? "and centreSchedules=? " : "and centreSchedules=centreSchedules ");
+      queryFilter = queryFilter + (query.centreSchedules ? "and centreSchedules like ? " : "and centreSchedules = centreSchedules ");
       if(query.centreSchedules) queryParams.push("%" + query.centreSchedules + "%")
 
       console.log(queryFilter);
