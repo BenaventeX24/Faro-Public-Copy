@@ -14,7 +14,7 @@ export class CentrePublicDAO {
   /*Method of type Promise of type Centre*/
   getCentre(id: number): Promise<Centre | undefined> {
     let centre: Centre;
-    let careersArr = new Array<Career>();
+    const careersArr = new Array<Career>();
     /*Database request are handled with Promises*/
     return new Promise((resolve, reject) => {
       /*Database requests are handled with Promises*/
@@ -27,10 +27,11 @@ export class CentrePublicDAO {
         /*callback*/
         async (err, res) => {
           /*If error then reject the promise*/
-          if (err) reject(err);
-          else {
+          if (err) {
+            reject(err);
+          } else {
             /*if something was returned from database*/
-            if (res?.[0].centreName !== null) {
+            if (res?.[0] !== undefined) {
               /*Just an assistant variable*/
               const centreData = res?.[0];
               /*Create a new centre (type Centre)*/
@@ -106,12 +107,11 @@ export class CentrePublicDAO {
     queryFilter: string,
     free: boolean,
     schoolarLevel: string,
-    centreSchedule: string,
+    centreSchedules: string,
     career: Career,
     queryParams: any[]
   ) {
     const centres: Centre[] = [];
-
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(queryFilter, queryParams, (err, res) => {
         if (err) reject(err);

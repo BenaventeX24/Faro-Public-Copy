@@ -10,28 +10,30 @@ export default class CentreController {
     const centres = response.data.map(
       (centre) =>
         new Centre(CentreSerializer.deSerializeCentreCoordinates(centre))
-    )
-    return centres
+    );
+    return centres;
   }
 
   static async getCentre(id) {
-    const response = await ApiService.get(API_ROUTES.CENTRE(id))
-    const centre = new Centre(CentreSerializer.deSerializeCentre(response.data))
-    return centre
+    const response = await ApiService.get(API_ROUTES.CENTRE(id));
+    const centre = new Centre(
+      CentreSerializer.deSerializeCentre(response.data)
+    );
+    return centre;
   }
 
   static async getCentreByFuzzyName(name) {
-    const response = await ApiService.get(API_ROUTES.FUZZY_CENTRE(name))
+    const response = await ApiService.get(API_ROUTES.FUZZY_CENTRE(name));
     const centres = response.data.map(
       (centre) =>
         new Centre(CentreSerializer.deSerializeCentreCoordinates(centre))
-    )
-    return centres
+    );
+    return centres;
   }
 
   static async getCentres() {
-    const response = await ApiService.get(API_ROUTES.CENTRES())
-    return response.data.map((centre) => centre)
+    const response = await ApiService.get(API_ROUTES.CENTRES());
+    return response.data.map((centre) => centre);
   }
 
   static async deleteCentre(id) {
@@ -39,13 +41,13 @@ export default class CentreController {
       headers: {
         "X-JWT-Token": localStorage.getItem("token"),
       },
-    }
+    };
     const response = await ApiService.delete(
       API_ROUTES.CENTRE(id),
       null,
       header
-    )
-    return response.status
+    );
+    return response.status;
   }
 
   static async createCentre(body) {
@@ -53,14 +55,14 @@ export default class CentreController {
       headers: {
         "X-JWT-Token": localStorage.getItem("token"),
       },
-    }
+    };
     const response = await ApiService.post(
       API_ROUTES.CENTRE_BASE(),
       body,
       header
-    )
-    console.log(Response)
-    return response.status
+    );
+    console.log(Response);
+    return response.status;
   }
 
   static async updateCentre(id, body) {
@@ -68,15 +70,17 @@ export default class CentreController {
       headers: {
         "X-JWT-Token": localStorage.getItem("token"),
       },
-    }
-    const response = await ApiService.put(API_ROUTES.CENTRE(id), body, header)
-    return response.status
+    };
+    const response = await ApiService.put(API_ROUTES.CENTRE(id), body, header);
+    return response.status;
   }
 
   static async getCentreByName(name) {
-    const response = await ApiService.get(API_ROUTES.CENTRE_BY_NAME(name))
-    const centre = new Centre(CentreSerializer.deSerializeCentre(response.data))
-    return centre
+    const response = await ApiService.get(API_ROUTES.CENTRE_BY_NAME(name));
+    const centre = new Centre(
+      CentreSerializer.deSerializeCentre(response.data)
+    );
+    return centre;
   }
 
   static async getCentresByFilter(values) {

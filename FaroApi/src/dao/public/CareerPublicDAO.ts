@@ -104,7 +104,7 @@ export class CareerPublicDAO {
                 res.map((career) => this.getCareerById(career.idCareer))
               ).then((careers) => resolve(careers));
             }
-            resolve([]); //else reject(Error("No_careers"));
+            resolve([]); // else reject(Error("No_careers"));
           }
         }
       );

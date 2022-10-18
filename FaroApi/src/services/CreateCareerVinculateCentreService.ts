@@ -12,9 +12,9 @@ export const createCareerVinculateCentreService = (
     careers.forEach((career) => {
       careerAdminDB.createCareer(career).then(
         (careerId) => {
-          careerAdminDB
-            .vinculateCentreCareer(centreId, careerId)
-            .then(() => resolve(centreId));
+          careerAdminDB.vinculateCentreCareer(centreId, careerId).then(() => {
+            resolve(centreId);
+          });
         },
         (err) => {
           if (err.code === "ER_DUP_ENTRY") {
