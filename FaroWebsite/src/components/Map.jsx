@@ -35,7 +35,6 @@ function MyComponent({filterCentre, filters}) {
 
   useEffect(() =>{
     if (filterCentre){
-      console.log(filterCentre)
      setMarkers([filterCentre]) 
     }
   },[filterCentre])

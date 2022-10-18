@@ -11,7 +11,7 @@ const API_ROUTES = {
   CAREERS: () => `/careers/`,
   DELETE_CAREER: (idCareer, idCentre) =>
     `careers/career?idCareer=${idCareer}&idCentre=${idCentre}`,
-  CENTRE_BY_FILTER: (filter, value) => `/centres/centre?${filter}=${value}`,
+  CENTRE_BY_FILTER: (values) => `/centres/centre?${values}`,
 }
 
 export { API_ROUTES }

@@ -11,8 +11,7 @@ import { diffValue } from "../utils/functions";
 
 const handleFilterData = (data) => {
   const searchBy = diffValue(data, 'all') 
-      console.log('searchBy',searchBy)
-        if (searchBy){
+        if (searchBy.length > 0){
           const getMarkers = async () => {
             setFilterData(await CentreController.getCentresByFilter(searchBy))
           }

@@ -1,7 +1,8 @@
-import { Centre } from "../../models/Centre";
-import { API_ROUTES } from "../api-routes";
-import { ApiService } from "../api-service";
-import { CentreSerializer } from "../serializers/centre-serializer";
+import { Centre } from "../../models/Centre"
+import { addQueryParams } from "../../utils/functions"
+import { API_ROUTES } from "../api-routes"
+import { ApiService } from "../api-service"
+import { CentreSerializer } from "../serializers/centre-serializer"
 
 export default class CentreController {
   static async getCentresCoordinates() {
@@ -83,8 +84,7 @@ export default class CentreController {
   }
 
   static async getCentresByFilter(values) {
-    values.map(value => console.log([value[0], value[1]]))
-    const response = await ApiService.get(API_ROUTES.CENTRE_BY_FILTER(values.map(value => [value[0], value[1]])))
+    const response = await ApiService.get(API_ROUTES.CENTRE_BY_FILTER(addQueryParams(values)))
     const centres = []
     response.data.map(centre => ApiService.get(API_ROUTES.CENTRE(centre.idCentre)).then(res => centres.push(new Centre(CentreSerializer.deSerializeCentre(res.data)))))
     return centres
