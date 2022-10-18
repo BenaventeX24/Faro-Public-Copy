@@ -7,20 +7,7 @@ import { Errors } from "../configuration/errors/Errors";
 dotenv.config();
 
 login.post("/", (req, res) => {
-  let session: SessionUsername;
-  if (
-    /*If credentials are correct. */
-    req.body.username === process.env.DB_USER &&
-    req.body.password === process.env.PASSWORD
-  ) {
-    /*Generate a session and send the token as response*/
-    session = {
-      username: process.env.DB_USER,
-    };
-    res.json(encodeSession(session).token);
-  } else {
-    Errors.unauthorized(res, "Credentials are invalid");
-  }
+  res.send("PONG");
 });
 /*Login method, pretty simple*/
 login.post("/r", (req, res) => {
