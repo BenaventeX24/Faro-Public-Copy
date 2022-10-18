@@ -40,11 +40,6 @@ function MyComponent({filterCentre, filters}) {
     }
   },[filterCentre])
 
-  useEffect(() =>{
-    console.log('markers',markers)
-  },[markers])
-  
-
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo", //va en el .env

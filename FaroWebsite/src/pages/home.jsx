@@ -13,9 +13,8 @@ const handleFilterData = (data) => {
   const searchBy = diffValue(data, 'all') 
       console.log('searchBy',searchBy)
         if (searchBy){
-          console.log('buenas')
           const getMarkers = async () => {
-            setFilterData(await CentreController.getCentresByFilter(searchBy[0], searchBy[1]))
+            setFilterData(await CentreController.getCentresByFilter(searchBy))
           }
           getMarkers()
         }

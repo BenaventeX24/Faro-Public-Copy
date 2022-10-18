@@ -27,7 +27,7 @@ const AddCareer = ({ onClick }) => {
   }
 
   const handleSubmit = (formValues) => {
-    const carreerFormKeywords = { ...formValues, keyword: keywords }
+    const carreerFormKeywords = { ...formValues, keywords: keywords }
     onClick(carreerFormKeywords)
   }
 

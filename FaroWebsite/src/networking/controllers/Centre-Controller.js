@@ -78,8 +78,9 @@ export default class CentreController {
     return centre
   }
 
-  static async getCentresByFilter(filter,value) {
-    const response = await ApiService.get(API_ROUTES.CENTRE_BY_FILTER(filter, value))
+  static async getCentresByFilter(values) {
+    values.map(value => console.log([value[0], value[1]]))
+    const response = await ApiService.get(API_ROUTES.CENTRE_BY_FILTER(values.map(value => [value[0], value[1]])))
     const centres = []
     response.data.map(centre => ApiService.get(API_ROUTES.CENTRE(centre.idCentre)).then(res => centres.push(new Centre(CentreSerializer.deSerializeCentre(res.data)))))
     return centres

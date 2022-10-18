@@ -25,6 +25,9 @@ export const createCareerVinculateCentreService = (
                   centreId,
                   car.getIdCareer()
                 );
+              },
+              (err) => {
+                reject(err);
               })
               .then(() => resolve(resolve));
           } else reject(err);
