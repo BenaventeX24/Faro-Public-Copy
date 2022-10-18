@@ -3,12 +3,15 @@ import SearchButton from "../components/searchButton"
 import Modal from "react-modal"
 import { InformationCircleIcon } from "@heroicons/react/24/outline"
 import CentreController from "../networking/controllers/Centre-Controller"
+import CustomToast from "../components/CustomToast"
 
 const DeleteCentre = () => {
   const [centresNames, setCentresNames] = useState([])
   const [centreName, setCentreName] = useState([])
   const [confirmMenu, setConfirmMenu] = useState(false)
   const [missingCentre, setMissingCentre] = useState(false)
+  const [centreDeleted, setCentreDeleted] = useState(false)
+  const [showToast, setShowToast] = useState(null)
 
   useEffect(() => {
     async function fetchCentres() {
@@ -16,7 +19,7 @@ const DeleteCentre = () => {
       setCentresNames(centres)
     }
     fetchCentres()
-  }, [])
+  }, [centreDeleted])
 
   const handleSearch = (searchValue) => {
     const centres = centresNames.map((centre) => centre.centreName)
@@ -34,8 +37,17 @@ const DeleteCentre = () => {
   }
 
   const deleteCentre = () => {
-    CentreController.deleteCentre(centreName.idCentre)
+    try {
+      // CentreController.deleteCentre(centreName.idCentre)
+      setCentreDeleted(true)
+      setShowToast(true)
+    }
+    catch (e) {
+      setShowToast(false)
+      setCentreDeleted(false)
+    }
     closeModal()
+    setCentreDeleted(true)
   }
 
   Modal.setAppElement("#root")
@@ -50,6 +62,16 @@ const DeleteCentre = () => {
 
   return (
     <div className="w-85% h-full bg-firstBg">
+       <CustomToast
+        show={showToast}
+        close={() => setShowToast(false)}
+        notifi={
+          centreDeleted
+            ? "centro eliminado"
+            : "Hubo un problema, intente nuevamente"
+        }
+        state={centreDeleted}
+      />
       <form className="w-95% h-full ml-auto">
         <div className="w-full">
           <h1 className="text-4xl py-12">Eliminar Centro</h1>
@@ -63,6 +85,7 @@ const DeleteCentre = () => {
               "dropdown flex w-96 h-11 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between"
             }
             searchValue={handleSearch}
+            clearValue={centreDeleted}
           ></SearchButton>
         </div>
         <div className="w-full h-1/5 flex flex-col items-end smMinH:h-0">
