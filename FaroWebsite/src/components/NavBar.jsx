@@ -5,7 +5,7 @@ import logo from "../assets/images/logo.svg";
 export default function NavBar() {
   return (
     <>
-      <ul className="w-full h-[8vh] bg-secondBg text-white flex items-center justify-between align-middle">
+      <ul className="w-full h-[8vh] min-h-[4.325rem] bg-secondBg text-white flex items-center justify-between align-middle">
         <div className="flex flex-row items-center">
           <li className="mb-2 ml-10 mr-12">
             <img src={logo} alt="a" />

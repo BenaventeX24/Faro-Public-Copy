@@ -135,7 +135,7 @@ const EditCentre = () => {
                 Nombre del centro a editar
               </label>
               <SearchButton
-                placeholder="Ingrese nombre del centro a editar"
+                placeholder="Ingrese nombre del centro a buscar"
                 centresName={centresNames.map((centre) => centre.centreName)}
                 className={
                   "dropdown flex w-full h-11 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between"

@@ -31,4 +31,9 @@ export default class CareerController {
     )
     return response.status
   }
+  static async getAllCareers() {
+    const response = await ApiService.get(API_ROUTES.CAREERS())
+    const careers = response.data.map((career) => new Career(CareerSerializer.deSerializeCareer(career)))
+    return careers
+  }
 }
