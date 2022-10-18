@@ -24,20 +24,20 @@ export const getCentreByParams = (query): Promise<Centre | any> => {
       );
     } else {
       let queryFilter = "select * from CENTRES_VW where ";
-      let queryParams = []
+      const queryParams = []
+
       queryFilter = queryFilter + (query.free ? "free=? " : "free=free ");
-      query.free && queryParams.push(query.free === 'true')
-      
+      if(query.free) queryParams.push(query.free)
+
       queryFilter = queryFilter + (query.schoolarLevel ? "and schoolarLevel=? " : "and schoolarLevel=schoolarLevel ");
-      query.schoolarLevel && queryParams.push(query.schoolarLevel)
+      if(query.schoolarLevel) queryParams.push(query.schoolarLevel)
 
       queryFilter = queryFilter + (query.centreSchedules ? "and centreSchedules=? " : "and centreSchedules=centreSchedules ");
-      query.centreSchedules && queryParams.push("%" + query.centreSchedules + "%")
-    
+      if(query.centreSchedules) queryParams.push("%" + query.centreSchedules + "%")
+
       centreDB
         .getCentresByFilter(
           queryFilter,
-
           query.free,
           query.schoolarLevel,
           query.centreSchedule,
