@@ -21,7 +21,7 @@ export class CentrePublicDAO {
       /*mysql2 driver requires classes that extend RowDataPacket*/
       dbPublic.query<CentreDB[]>(
         /*Raw mysql query*/
-        "SELECT * FROM CENTRES_VW where idCentre=?",
+        "SELECT * FROM centre where idCentre=?",
         /*Every sent paramether will match every '?' mark*/
         [id],
         /*callback*/
