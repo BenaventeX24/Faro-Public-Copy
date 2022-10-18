@@ -103,21 +103,6 @@ export class CentrePublicDAO {
     });
   }
 
-  getCentresByFilter(queryFilter: string, queryParams: any[]) {
-    const centres: Centre[] = [];
-    return new Promise((resolve, reject) => {
-      dbPublic.query<CentreDB[]>(queryFilter, queryParams, (err, res) => {
-        if (err) reject(err);
-        else {
-          res.forEach((cen) => {
-            centres.push(new Centre(cen.idCentre, cen.centreName));
-          });
-          resolve(centres);
-        }
-      });
-    });
-  }
-
   getCentreByName(centreName: string): Promise<Centre | undefined> {
     return new Promise((resolve, reject) => {
       dbPublic.query<CentreDB[]>(
@@ -185,6 +170,22 @@ export class CentrePublicDAO {
           }
         }
       );
+    });
+  }
+
+  getCentresByFilter(queryFilter: string, queryParams: any[]) {
+    const centres: Centre[] = [];
+    return new Promise((resolve, reject) => {
+      dbPublic.query<CentreDB[]>(queryFilter, queryParams, (err, res) => {
+
+        if (err) reject(err);
+        else {
+          res.forEach((cen) => {
+            centres.push(new Centre(cen.idCentre, cen.centreName));
+          });
+          resolve(centres);
+        }
+      });
     });
   }
 
