@@ -51,15 +51,14 @@ const CreateCentre = () => {
               setCentreAdded(true)
               setShowToast(true)
               handleResetForm()
-            } else {
-              setCentreAdded(false)
-              setShowToast(true)
             }
           })
           .catch((err) => {
             if (err.status === 401) {
               navigate("/login")
             }
+            setCentreAdded(false)
+            setShowToast(true)
           })
       } else {
         setAddressState(true)
