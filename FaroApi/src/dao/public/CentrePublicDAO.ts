@@ -27,10 +27,11 @@ export class CentrePublicDAO {
         /*callback*/
         async (err, res) => {
           /*If error then reject the promise*/
-          if (err) reject(err);
-          else {
+          if (err) {
+            reject(err);
+          } else {
             /*if something was returned from database*/
-            if (res?.[0].centreName !== null) {
+            if (res?.[0] !== undefined) {
               /*Just an assistant variable*/
               const centreData = res?.[0];
               /*Create a new centre (type Centre)*/

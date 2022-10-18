@@ -37,29 +37,6 @@ export default function FilterForm(props) {
     { value: true, label: "Público" },
   ];
 
-  useEffect(() => {
-    const getCareers = async (value) => {
-      setCareersFormikOp(
-        /*{
-          value: "any",
-          label: "Cualquiera",
-        } +*/
-        (await CareerController.getAllCareers()).map((car) => ({
-          value: car.idCareer,
-          label: car.careerName,
-        }))
-      );
-      /*
-      setCareersFormikOp(
-        (await CareerController.getAllCareers()).map((car) => ({
-          value: car.idCareer,
-          label: car.careerName,
-        }))
-      );*/
-    };
-    getCareers();
-  }, [careersFormikOp]);
-
   const careersOptions = [
     { value: "any", label: "Cualquiera" },
     ...careersFormikOp,

@@ -67,7 +67,9 @@ export class CareerAdminDAO {
         [idCentre, idCareer],
         (err, res) => {
           if (err) reject(err);
-          else resolve(res);
+          else {
+            resolve(res);
+          }
         }
       );
     });
