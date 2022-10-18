@@ -48,7 +48,7 @@ export class CentreAdminDAO {
           centre.getPhoneNumber(),
         ],
         async (err, res) => {
-          if (err) reject(err + "error");
+          if (err) reject("RAZONE'");
           else {
             /*For every given schedule vinculate it to the centre*/
             await this.vinculateCentreSchedules(
