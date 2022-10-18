@@ -6,11 +6,8 @@ import { encodeSession } from "../configuration/JWTConfig";
 import { Errors } from "../configuration/errors/Errors";
 dotenv.config();
 
-login.post("/", (req, res) => {
-  res.send("PONG");
-});
 /*Login method, pretty simple*/
-login.post("/r", (req, res) => {
+login.post("/", (req, res) => {
   let session: SessionUsername;
   if (
     /*If credentials are correct. */
