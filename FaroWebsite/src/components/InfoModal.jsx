@@ -1,49 +1,57 @@
-import mapMarker from "../assets/images/mapMarker.svg";
-import clock from "../assets/images/clock.svg";
-import phone from "../assets/images/phone.svg";
-import closeIcon from "../assets/images/closeIcon.svg";
+import React from "react"
+import {
+  ClockIcon,
+  MapPinIcon,
+  PhoneArrowDownLeftIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline"
 
-export default function InfoModal(props) {
+const InfoModal = ({openModal, centreName, schoolarLevel, free, addressStreet, centreSchedules, phoneNumber, careers}) => {
+  
   return (
-    <>
-      <ul className="bg-white flex flex-col text-black text-lg text-white absolute top-0 left-0 z-20 h-full w-[380px] p-4">
-        <img
-          className="w-[50px] h-[50px] right-0 top-0 pr-[inherit] pt-[inherit] absolute cursor-pointer"
-          src={closeIcon}
-          alt=""
-          onClick={() => props.openModal(false)}
+    <div className="bg-firstBg text-white absolute  left-0 z-20 h-[92vh] w-96 overflow-scroll">
+      <div className="flex flex-col w-full p-4">
+        <XMarkIcon
+          className="w-12 right-0 top-0 pr-[inherit] pt-[inherit] absolute cursor-pointer"
+          onClick={() => openModal(false)}
         />
-        <li className="text-5xl font-extrabold mb-[-4px]">
-          {props.centreName}
-        </li>
-        <li className="font-bold">
-          {props.schoolarLevel} - {props.free ? "Público" : "Privado"}
-        </li>
-        <div className="w-full mt-2 mb-2.5 h-[1px] mb-2 mt-2 bg-black"></div>
-        <li className="mb-1 flex text-wrap">
-          <img src={mapMarker} alt="" /> {props.addressStreet}{" "}
-          {props.addressNumber}
-        </li>
-        <li className="mb-1 flex ">
-          <img className="mr-[4.5px]" src={clock} alt="" />
-          {props.centreSchedules.join(", ")}
-        </li>
-        <li className="mb-1 flex">
-          <img className="mr-[4.5px]" src={phone} alt="" />
-          {props.phoneNumber}
-        </li>
-        <div className="w-full mt-2 mb-2 h-[1px] mb-2 mt-2 bg-black"></div>
-        <h2 className="font-bold">Carreras: </h2>
-        <div className="shadow-lg bg-lightGray m-2 p-2 overflow-y-scroll">
-          {props.careers?.map((car) => (
-            <div key={car.idCareer}>
-              <li className="text-xl font-extrabold">{car.careerName}</li>
-              <li className="text-xl">{car.careerDescription}</li>
-              <li className="text-xl">{car.duration}</li>
+        <h2 className="text-5xl font-bold">{centreName}</h2>
+        <h3>
+          {schoolarLevel} - {free ? "Público" : "Privado"}
+        </h3>
+        <div className="w-full mt-2 mb-2.5 h-[1px] mb-2 mt-2 bg-white"></div>
+      </div>
+      <div className="flex flex-col px-4">
+        <section className="flex items-center">
+          <MapPinIcon className="w-8 mr-2" />
+          {addressStreet}
+        </section>
+        <section className="flex items-center mt-2">
+          <ClockIcon className="w-8 mr-2" />
+          {centreSchedules.length > 1
+            ? centreSchedules.join(",  ")
+            : centreSchedules}
+        </section>
+        <section className="flex items-center mt-2">
+          <PhoneArrowDownLeftIcon className="w-8 mr-2" />
+          {phoneNumber}
+        </section>
+        <div className="w-full mt-8 mb-2.5 h-[1px] mb-2 mt-2 bg-white"></div>
+      </div>
+      <div className="px-4 overflow-y-scroll flex-flex-col overflow-y-scroll">
+        <h2 className="text-xl font-bold">Carreras: </h2>
+        <div className="shadow-lg m-2 p-2 overflow-y-scroll">
+          {careers?.map((career) => (
+            <div key={career.idCareer}>
+              <li className="text-2xl font-bold pt-2">{career.careerName}</li>
+              <li>{career.careerDescription}</li>
+              <li>{career.duration}</li>
             </div>
           ))}
         </div>
-      </ul>
-    </>
-  );
+      </div>
+    </div>
+  )
 }
+
+export default InfoModal

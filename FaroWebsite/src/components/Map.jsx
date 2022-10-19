@@ -19,6 +19,7 @@ function MyComponent({filterCentre, filters}) {
   const [map, setMap] = useState(null);
   const [zoom, setZoom] = useState(12);
   const [markers, setMarkers] = useState(null);
+  const [modalInfo, setModalInfo] = useState(false);
 
   useEffect(() =>{
     const getCentresCoords = async () => {
@@ -56,8 +57,9 @@ function MyComponent({filterCentre, filters}) {
 
   const handleMarkerClick = (clicked) => {
     async function fetchData() {
-      let centre = await CentreController.getCentre(clicked.idCentre);
+      const centre = await CentreController.getCentre(clicked.idCentre);
       setInfo(centre);
+      setModalInfo(true)
     }
     fetchData();
   };
@@ -90,7 +92,7 @@ function MyComponent({filterCentre, filters}) {
           centreSchedules={info.centreSchedules}
           phoneNumber={info.phoneNumber}
           careers={info.careers}
-          openModal={setInfo}
+          openModal={setModalInfo}
         />
       )}
       <GoogleMap

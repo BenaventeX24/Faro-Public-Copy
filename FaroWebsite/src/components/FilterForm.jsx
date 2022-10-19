@@ -88,7 +88,7 @@ export default function FilterForm({filterData, filterCentre}) {
             placeholder="Ingrese nombre del centro a buscar"
             centresName={centresNames.map((centre) => centre.centreName)}
             className={
-              "dropdown flex w-4/5 h-14 bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between mt-8"
+              "dropdown flex w-4/5 h-14 min-h-[2.75rem] bg-secondBg rounded-md border-2 border-solid border-firstColor text-white justify-between mt-8"
             }
             searchValue={searchCentreName}
           />

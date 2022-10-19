@@ -3,9 +3,10 @@ import FilterForm from "../components/FilterForm";
 import Map from "../components/Map";
 import NavBar from "../components/NavBar";
 import CentreController from "../networking/controllers/Centre-Controller";
-import { diffValue } from "../utils/functions";
+import { diffValue, isMobile } from "../utils/functions";
+import MobileErrorView from "../utils/mobileErrorView";
 
- const Home = () => {
+const Home = () => {
   const [filterData, setFilterData] = useState();
   const [filterCentre, setFilterCentre] = useState();
 
@@ -21,7 +22,9 @@ const handleFilterData = (data) => {
 const handleFilterCentre = (centre) => {
   setFilterCentre(centre)
 }
-
+if (isMobile()) {
+  return <MobileErrorView />
+} else {
   return (
     <div className="h-screen">
       <NavBar/>
@@ -34,5 +37,5 @@ const handleFilterCentre = (centre) => {
     </div>
   );
 }
-
+}
 export default Home;

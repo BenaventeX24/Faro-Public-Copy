@@ -19,9 +19,6 @@ export default function NavBar() {
           <li className="text-xl mr-24">
             <Link to="/about">About Us</Link>
           </li>
-          <li className="text-xl mr-24">
-            <Link to="/support">Soporte</Link>
-          </li>
         </div>
       </ul>
     </>
