@@ -7,11 +7,10 @@ import NavBar from '../components/NavBar';
 
  const AboutPage = () => {
   return (
-    <>
+    <div className='w-screen h-screen backgroundAboutUs no-scrollbar text-white min-h-sm overflow-scroll'>
         <NavBar/>
-      <div className='w-screen h-screen backgroundAboutUs no-scrollbar text-white p-32'>
         <div>
-          <div>
+          <div className='pl-32 pt-32'>
             <h1 className='text-5xl ml-8'>
               Faro ayuda a los estudiantes<br/>
               a encontrar su vocación
@@ -68,7 +67,6 @@ import NavBar from '../components/NavBar';
             </div>
           </div>
       </div>
-    </>
   );
 }
 

@@ -17,9 +17,9 @@ const center = {
 function MyComponent({filterCentre, filters}) {
   const [info, setInfo] = useState(null);
   const [map, setMap] = useState(null);
-  const [zoom, setZoom] = useState(12);
   const [markers, setMarkers] = useState(null);
   const [modalInfo, setModalInfo] = useState(false);
+  const [loadMap, setLoadMap] = useState(false);
 
   useEffect(() =>{
     const getCentresCoords = async () => {
@@ -40,9 +40,13 @@ function MyComponent({filterCentre, filters}) {
     }
   },[filterCentre])
 
+  useEffect(() =>{
+   setLoadMap(true)
+  },[])
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo", //va en el .env
+    googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo",
   });
 
   const onLoad = useCallback(async function callback(map) {
@@ -98,10 +102,10 @@ function MyComponent({filterCentre, filters}) {
       <GoogleMap
         mapContainerStyle={containerStyle}
         //onUnmount={onUnmount}
+        zoom={12}
         center={center}
-        onLoad={onLoad}
         options={myOptions}
-        zoom={zoom}
+        onLoad={onLoad}
       >
         {markers?.map((marker) => {
             return (
