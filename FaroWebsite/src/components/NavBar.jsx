@@ -1,8 +1,10 @@
 import { React } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo.svg";
 
-export default function NavBar() {
+const NavBar = () => {
+  const location = useLocation();
+
   return (
     <>
       <ul className="w-full h-[8vh] min-h-[4.325rem] bg-secondBg text-white flex items-center justify-between align-middle">
@@ -15,12 +17,20 @@ export default function NavBar() {
         <div className="flex flex-row">
           <li className="text-xl mr-24">
             <Link to="/">Home</Link>
+            {location.pathname.includes('/home') ? 
+               <div className="w-full h-1 relative bg-firstColor"></div>
+            :""}
           </li>
           <li className="text-xl mr-24">
             <Link to="/about">About Us</Link>
+            {location.pathname.includes('/about') ? 
+               <div className="w-full h-1 relative bg-firstColor"></div>
+            :""}
           </li>
         </div>
       </ul>
     </>
   );
 }
+
+export default NavBar;

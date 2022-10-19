@@ -31,9 +31,6 @@ export default function FilterForm({filterData, filterCentre}) {
     },
   });
 
-  //crear otra prop para manejar la busqueda del centro y que se actualice asi, 
-  //tambien manejar que se actualice cuando le damos click al boton de busqueda
-
   const schoolarLevel = [
     { value: "all", label: "Todos" },
     { value: "Bachillerato", label: "Bachillerato" },

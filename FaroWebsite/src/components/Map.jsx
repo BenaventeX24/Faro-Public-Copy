@@ -81,7 +81,7 @@ function MyComponent({filterCentre, filters}) {
 
   return isLoaded ? (
     <div className="h-full">
-      {info && (
+      {modalInfo && (
         <InfoModal
           idCentre={info.idCentre}
           centreName={info.centreName}
