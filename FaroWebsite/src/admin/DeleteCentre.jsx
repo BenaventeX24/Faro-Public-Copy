@@ -38,7 +38,7 @@ const DeleteCentre = () => {
 
   const deleteCentre = () => {
     try {
-      // CentreController.deleteCentre(centreName.idCentre)
+      CentreController.deleteCentre(centreName.idCentre)
       setCentreDeleted(true)
       setShowToast(true)
     }
