@@ -1,13 +1,14 @@
+import React from 'react'
 import {Link} from 'react-router-dom'
 import Farologo from "../assets/images/Farologo.png";
 import Object from "../assets/images/Object.svg"
 import moreInformation from "../assets/images/moreInformation.svg";
 
-export default function AboutPage() {
+ const AboutPage = () => {
   return (
     <>
-      <div className='w-screen backgroundAboutUs no-scrollbar text-white p-32'>
-        <div className=''>
+      <div className='w-screen h-screen backgroundAboutUs no-scrollbar text-white p-32'>
+        <div>
           <div>
             <h1 className='text-5xl ml-8'>
               Faro ayuda a los estudiantes<br/>
@@ -18,13 +19,13 @@ export default function AboutPage() {
               donde estudiar o simplemente cuales son las opciones, ahí es donde<br/>
               faro nos ayuda.
             </p>
-            <Link to="/"> <button className='button ml-8 mt-8'> Empezar a buscar </button> </Link>
+            <Link to="/"> <button className='text-white button ml-8 mt-8'> Empezar a buscar </button> </Link>
           </div>
         </div>
           <div className='w-85% flex justify-around mx-20 mt-40 '>
             <div className='w-64'>
-             <div className='flex display-flex'>
-                <img src={Farologo}  alt='a' className='w-11 h-16'/>
+             <div className='flex'>
+                <img src={Farologo}  alt='Faro Logo' className='w-11'/>
                 <h3 className='text-2xl'>
                   ¿Qué es Faro?
                 </h3>
@@ -36,8 +37,8 @@ export default function AboutPage() {
               estudiar o donde.
             </div>
             <div className='w-64'>
-              <div className='flex dsiplay-flex'>
-                <img src={Object} alt="m" className='w-16 h-16'/>
+              <div className='flex'>
+                <img src={Object} alt="Our Objective" className='w-16'/>
                 <h3 className='text-2xl'>
                   Nuestro objetivo
                 </h3>
@@ -49,8 +50,8 @@ export default function AboutPage() {
               diferencia en el país.
             </div>
             <div className='w-64'>
-              <div className='flex display-flex'>
-                <img src={moreInformation} alt='r' className='w-11 h-16'/>
+              <div className='flex'>
+                <img src={moreInformation} alt='More Information' className='w-11'/>
                 <h3 className='text-2xl'>
                   Más información
                 </h3>
@@ -68,3 +69,5 @@ export default function AboutPage() {
     </>
   );
 }
+
+export default AboutPage;
