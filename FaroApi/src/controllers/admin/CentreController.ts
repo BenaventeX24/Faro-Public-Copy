@@ -32,12 +32,12 @@ centresAdmin.post("/", (req, res) => {
 centresAdmin.put("/centre", (req, res) => {
   const query = require("url").parse(req.url, true).query;
 
-  const centre: Centre = Object.assign(new Centre(), req.body);
+  const centreData: Centre = Object.assign(new Centre(), req.body);
 
-  const checkCorrectBody = CheckMissingProperty_Centre(centre);
+  const checkCorrectBody = CheckMissingProperty_Centre(centreData);
 
-  if (checkCorrectBody.ok)
-    centreDB.updateCentre(query.id, centre).then(
+  if (checkCorrectBody.ok && query.id)
+    centreDB.updateCentre(query.id, centreData).then(
       () => {
         res.status(200).send("Centre succesfully edited");
       },

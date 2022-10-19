@@ -20,15 +20,17 @@ export const createCareerVinculateCentreService = (
           if (err.code === "ER_DUP_ENTRY") {
             careerPublicDB
               .getCareerByName(career.getCareerName())
-              .then(async (car) => {
-                await careerAdminDB.vinculateCentreCareer(
-                  centreId,
-                  car.getIdCareer()
-                );
-              },
-              (err) => {
-                reject(err);
-              })
+              .then(
+                async (car) => {
+                  await careerAdminDB.vinculateCentreCareer(
+                    centreId,
+                    car.getIdCareer()
+                  );
+                },
+                (err) => {
+                  reject(err);
+                }
+              )
               .then(() => resolve(resolve));
           } else reject(err);
         }
