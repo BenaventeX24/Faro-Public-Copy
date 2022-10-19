@@ -17,13 +17,13 @@ const NavBar = () => {
         <div className="flex flex-row">
           <li className="text-xl mr-24">
             <Link to="/">Home</Link>
-            {location.pathname.includes('/home') ? 
+            {location.pathname === '/' ? 
                <div className="w-full h-1 relative bg-firstColor"></div>
             :""}
           </li>
           <li className="text-xl mr-24">
             <Link to="/about">About Us</Link>
-            {location.pathname.includes('/about') ? 
+            {location.pathname === '/about' ? 
                <div className="w-full h-1 relative bg-firstColor"></div>
             :""}
           </li>

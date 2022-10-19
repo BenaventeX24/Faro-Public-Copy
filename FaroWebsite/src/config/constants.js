@@ -12,6 +12,6 @@ const environment = {
 };
 
 export const constants = {
-  apiBaseURL: fetchVariable("REACT_APP_API_BASE_URL", "http://10.1.0.211:7000"),
+  apiBaseURL: fetchVariable("REACT_APP_API_BASE_URL", "http://localhost:7000"),
   environment,
 };
