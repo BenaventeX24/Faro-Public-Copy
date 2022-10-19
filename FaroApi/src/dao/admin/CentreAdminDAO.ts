@@ -145,10 +145,7 @@ export class CentreAdminDAO {
             );
             await this.updateSchedules(centre.getCentreSchedules(), idCentre);
             if (centreCareers.length > 0)
-              await createCareerVinculateCentreService(
-                centreCareers,
-                res.insertId
-              );
+              await createCareerVinculateCentreService(centreCareers, idCentre);
             centrePublicDB
               .getCentre(idCentre)
               .then((centre) => resolve(centre!))
