@@ -43,7 +43,7 @@ export const centreScheduleOptions = [
   { value: 'Vespertino', label: 'Vespertino' },
   { value: 'Matutino', label: 'Matutino' },
   { value: 'Nocturno', label: 'Nocturno' },
-  { value: 'Horario completo', label: 'Horario completo' },
+  { value: 'Completo', label: 'Horario completo' },
   
 ]
 export const freeOptions = [
