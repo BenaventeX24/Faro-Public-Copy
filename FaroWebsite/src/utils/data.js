@@ -17,9 +17,6 @@ export const centreValidation = () => Yup.object().shape({
   centreSchedules: Yup.array()
     .min(1, 'Ingrese almenos un horario')
     .required('Ingrese los horarios del centro'),
-  careers: Yup.array().nullable()
-    .min(1, 'Ingrese al menos una carrera')
-    .required('Ingrese al menos una carrera al centro')
 })
 
 export const AddCareerValidation = () => Yup.object().shape({
