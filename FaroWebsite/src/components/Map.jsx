@@ -19,7 +19,6 @@ function MyComponent({filterCentre, filters}) {
   const [map, setMap] = useState(null);
   const [markers, setMarkers] = useState(null);
   const [modalInfo, setModalInfo] = useState(false);
-  const [loadMap, setLoadMap] = useState(false);
 
   useEffect(() =>{
     const getCentresCoords = async () => {
@@ -39,10 +38,6 @@ function MyComponent({filterCentre, filters}) {
      setMarkers([filterCentre]) 
     }
   },[filterCentre])
-
-  useEffect(() =>{
-   setLoadMap(true)
-  },[])
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -101,7 +96,7 @@ function MyComponent({filterCentre, filters}) {
       )}
       <GoogleMap
         mapContainerStyle={containerStyle}
-        //onUnmount={onUnmount}
+        onUnmount={onUnmount}
         zoom={12}
         center={center}
         options={myOptions}
