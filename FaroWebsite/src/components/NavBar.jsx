@@ -9,8 +9,8 @@ const NavBar = () => {
     <>
       <ul className={`w-full h-[8vh] min-h-[4.325rem] ${location.pathname === '/about' ? 'bg-transparent': 'bg-secondBg'} text-white flex items-center justify-between align-middle`}>
         <div className="flex flex-row items-center">
-          <li className="mb-2 ml-10 mr-12">
-            <img src={logo} alt="a" />
+          <li className="mb-2 ml-10 mr-4">
+            <img className="w-12" src={logo} alt="a" />
           </li>
           <li className="text-3xl mr-24">Faro</li>
         </div>
