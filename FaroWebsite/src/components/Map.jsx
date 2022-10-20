@@ -46,7 +46,7 @@ function MyComponent({filterCentre, filters}) {
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCIfWaZPMHJaqzMX6R36zyz0-8RenAzKyo",
+    googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
   });
 
   const onLoad = useCallback(async function callback(map) {
