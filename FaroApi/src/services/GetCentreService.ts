@@ -41,6 +41,9 @@ export const getCentreByParams = (query): Promise<Centre | any> => {
       queryFilter = queryFilter + (query.keyword ? "and keywords like ? " : "and keywords=keywords ");
       if(query.keyword) queryParams.push("%" + query.keyword + "%");
 
+      console.log(queryFilter);
+      
+
       centreDB
         .getCentresByFilter(
           queryFilter,
