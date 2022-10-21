@@ -85,7 +85,6 @@ export default class CentreController {
   static async getCentresByFilter(values) {
     const queryParams = addQueryParams(values)
     const response = await ApiService.get(API_ROUTES.CENTRE_BY_FILTER(queryParams))
-console.log(response.data)
     return response.data
   }
 }
